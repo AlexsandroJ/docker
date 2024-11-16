@@ -26,5 +26,16 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+        - "80:80"
+    networks: 
+        - minha-rede
+    depends_on:
+        - "app"
 volumes:
   mongo-data:
+networks:
+  minha-rede:
