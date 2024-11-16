@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    image: node:latest
+    container_name: app
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    # Adiciona o comando para clonar o repositório e instalar dependências
+    entrypoint: /bin/bash -c "git clone https://github.com/AlexsandroJ/whatsapp-api.git . && npm install && npm start"
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+
+volumes:
+  mongo-data:
