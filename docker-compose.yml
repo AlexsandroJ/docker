@@ -9,6 +9,8 @@ services:
       - .:/usr/src/app
     ports:
       - "3000:3000"
+    networks: 
+      - minha-rede
     depends_on:
       - mongo
     environment:
