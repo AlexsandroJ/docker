@@ -15,7 +15,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
     # Adiciona o comando para clonar o repositório e instalar dependências
-    entrypoint: /usr/src/app -c "git clone https://github.com/AlexsandroJ/whatsapp-api.git . && npm install && npm start "
+    entrypoint: "git clone https://github.com/AlexsandroJ/whatsapp-api.git . && npm install && npm start "
   mongo:
     image: mongo
     container_name: mongo
