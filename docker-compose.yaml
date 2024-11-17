@@ -1,44 +1,8 @@
+version: '3.8'
+
 services:
-  app:
-    image: alpine
-    container_name: app
-    #working_dir: /usr/src/app
-    #volumes:
-    #  - alpine-data:/usr/src/app
-    #ports:
-     # - "3000:3000"
-    networks: 
-     - minha
-    #depends_on:
-      #- mongo
-    #environment:
-    #  - MONGO_INITDB_ROOT_USERNAME=admin
-    #  - MONGO_INITDB_ROOT_PASSWORD=admin
-    # Adiciona o comando para clonar o repositório e instalar dependências
-    #entrypoint: "apk update ; apk add git nodejs npm ; git clone https://github.com/AlexsandroJ/docker.git .  ; npm install ; npm start "
-    entrypoint: /bin/sh -c "apk update ; apk add --no-cache git"
-  mongo:
-    image: mongo
-    container_name: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=admin
-  nginx:
-    image: nginx
-    container_name: nginx
-    ports:
-        - "80:80"
-    networks: 
-        - minha-rede
-    depends_on:
-        - "app"
-volumes:
-  mongo-data:
-  alpine-data:
-networks:
-  minha-rede:
-  minha:
+  alpine_app:
+    image: alpine:latest
+    container_name: alpine_container
+    command: /bin/sh -c "apk update && apk upgrade && apk add curl && curl -I https://www.google.com"
+    tty: true
