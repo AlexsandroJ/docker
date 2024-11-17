@@ -43,3 +43,5 @@ volumes:
 networks:
   minha-rede:
   minha:
+    driver: host
+    external: true
