@@ -1,14 +1,14 @@
 services:
   app:
-    #image: alpine
+    image: alpine
     container_name: app
-    #working_dir: /usr/src/app
-    #volumes:
-    #  - alpine-data:/usr/src/app
-    #ports:
-    #  - "3000:3000"
-    #networks: 
-    # - minha
+    working_dir: /usr/src/app
+    volumes:
+      - alpine-data:/usr/src/app
+    ports:
+      - "3000:3000"
+    networks: 
+     - minha
     #depends_on:
       #- mongo
     #environment:
