@@ -42,5 +42,6 @@ volumes:
   alpine-data:
 networks:
   minha-rede:
+  host:
   
 
