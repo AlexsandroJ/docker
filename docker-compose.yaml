@@ -16,7 +16,7 @@ services:
     #  - MONGO_INITDB_ROOT_PASSWORD=admin
     # Adiciona o comando para clonar o repositório e instalar dependências
     #entrypoint: "apk update ; apk add git nodejs npm ; git clone https://github.com/AlexsandroJ/docker.git .  ; npm install ; npm start "
-    command: ["apt update && apt install -y git npm nodejs && git clone https://github.com/AlexsandroJ/whatsapp-api.git . && npm install && npm start "]
+    command: ["apt update && apt install -y git npm nodejs && git clone https://github.com/AlexsandroJ/whatsapp-api.git ."]
     #entrypoint: /bin/sh -c "apt update && apt install -y --no-cache git npm nodejs"
   mongo:
     image: mongo
