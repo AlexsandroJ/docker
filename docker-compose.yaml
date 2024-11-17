@@ -2,7 +2,7 @@ services:
   app:
     image: ubuntu
     container_name: app
-    working_dir: /usr/src/app
+    #working_dir: /usr/src/app
     #volumes:
     #  - alpine-data:/usr/src/app
     #ports:
@@ -16,7 +16,8 @@ services:
     #  - MONGO_INITDB_ROOT_PASSWORD=admin
     # Adiciona o comando para clonar o repositório e instalar dependências
     #entrypoint: "apk update ; apk add git nodejs npm ; git clone https://github.com/AlexsandroJ/docker.git .  ; npm install ; npm start "
-    entrypoint: /bin/sh -c "apt update && apt install -y --no-cache git npm nodejs"
+    command: "/bin/bash"
+    #entrypoint: /bin/sh -c "apt update && apt install -y --no-cache git npm nodejs"
   mongo:
     image: mongo
     container_name: mongo
