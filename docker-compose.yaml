@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
-  alpine_app:
-    image: alpine:latest
-    container_name: alpine_container
-    command: /bin/sh -c "apk update && apk upgrade && apk add curl && curl -I https://www.google.com"
-    tty: true
+  alpine:
+    image: alpine
+    container_name: alpine
+    command: /bin/sh -c "apk update && apk add curl && curl -I https://www.google.com"
+    
