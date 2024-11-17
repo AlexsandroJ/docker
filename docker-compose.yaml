@@ -44,4 +44,4 @@ networks:
   minha-rede:
   rede_ubuntu:
     driver: host
-    external: true
+    
