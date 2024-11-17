@@ -7,8 +7,8 @@ services:
     #  - alpine-data:/usr/src/app
     #ports:
     #  - "3000:3000"
-    #networks: 
-    # - minha
+    networks: 
+     - minha
     #depends_on:
       #- mongo
     #environment:
@@ -43,3 +43,4 @@ volumes:
 networks:
   minha-rede:
   minha:
+    driver: host
