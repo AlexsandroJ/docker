@@ -1,6 +1,6 @@
 services:
   app:
-    image: alpine
+    #image: alpine
     container_name: app
     #working_dir: /usr/src/app
     #volumes:
