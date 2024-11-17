@@ -17,7 +17,7 @@ services:
     # Adiciona o comando para clonar o repositório e instalar dependências
     #entrypoint: "apk update ; apk add git nodejs npm ; git clone https://github.com/AlexsandroJ/docker.git .  ; npm install ; npm start "
     #command: ["apt update && apt install -y git npm nodejs"]
-    entrypoint: /usr/src/app -c "apt update && apt install -y git npm nodejs"
+    entrypoint: "apt update && apt install -y git npm nodejs"
   mongo:
     image: mongo
     container_name: mongo
