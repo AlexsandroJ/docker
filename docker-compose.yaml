@@ -2,7 +2,7 @@ services:
   app:
     image: ubuntu
     container_name: app
-    #working_dir: /usr/src/app
+    working_dir: /usr/src/app
     #volumes:
     #  - alpine-data:/usr/src/app
     #ports:
