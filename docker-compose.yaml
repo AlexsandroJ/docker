@@ -8,7 +8,7 @@ services:
     #ports:
     #  - "3000:3000"
     networks: 
-     - rede_ubuntu
+     - host
     #depends_on:
       #- mongo
     #environment:
@@ -42,6 +42,5 @@ volumes:
   alpine-data:
 networks:
   minha-rede:
-  rede_ubuntu:
-    driver: host
-    
+  
+
