@@ -1,9 +1,7 @@
 volumes:
   mongo-data:
-  app-data:
+  #app-data:
   nginx-html-data:
-  nginx-logs-data:
-  nginx-config-data:
 
 services:
   
@@ -29,9 +27,7 @@ services:
       context: .
       dockerfile: Dockerfile-nginx
     volumes:
-        - nginx-html-data:/var/www/html
-        - nginx-logs-data:/var/log/nginx
-        - nginx-config-data:/etc/nginx/conf.d
+        - nginx-html-data:/usr/share/nginx/html
     ports:
         - "80:80"
         - "443:443"
