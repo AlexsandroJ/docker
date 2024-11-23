@@ -1,0 +1,18 @@
+# Usar a imagem base oficial do Nginx
+FROM nginx:latest
+
+# Instalar o Git
+RUN apt-get update && apt-get install -y git
+
+# Definir o diretório de trabalho
+WORKDIR /usr/share/nginx/html
+
+# Clonar o repositório Git e copiar o index.html
+RUN rm -f index.html \
+    && git clone https://github.com/AlexsandroJ/portifolio.git .
+
+# Expor a porta padrão do Nginx
+EXPOSE 80
+
+# Comando para rodar o Nginx
+CMD ["nginx", "-g", "daemon off;"]

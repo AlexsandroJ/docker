@@ -1,0 +1,49 @@
+volumes:
+  mongo-data:
+  app-data:
+  nginx-html-data:
+  nginx-logs-data:
+  nginx-config-data:
+
+services:
+  app:
+    container_name: app
+    working_dir: /usr/src/app
+    volumes:
+      - app-data:/usr/src/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    # Adiciona o comando para clonar o repositório e instalar dependências
+    build:
+      context: ./app
+      dockerfile: Dockerfile-app
+
+  nginx:
+    container_name: nginx
+    volumes:
+        - nginx-html-data:/var/www/html
+        - nginx-logs-data:/var/log/nginx
+        - nginx-config-data:/etc/nginx/conf.d
+    ports:
+        - "${NGINX_HOST_HTTP_PORT}:80"
+        - "${NGINX_HOST_HTTPS_PORT}:443"
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile-nginx
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+
