@@ -6,6 +6,7 @@ volumes:
   nginx-config-data:
 
 services:
+  
   app:
     container_name: app
     build:
@@ -20,9 +21,9 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
     # Adiciona o comando para clonar o repositório e instalar dependências
-
+  
   nginx:
-    image: nginx:latest
+    #image: nginx:latest
     container_name: nginx
     build:
       context: .
@@ -34,7 +35,7 @@ services:
     ports:
         - "80:80"
         - "443:443"
-
+        
   mongo:
     image: mongo:latest
     container_name: mongo
