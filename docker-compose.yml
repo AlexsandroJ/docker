@@ -8,23 +8,24 @@ volumes:
 services:
   app:
     container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile-app
     working_dir: /usr/src/app
     volumes:
       - app-data:/usr/src/app
     ports:
       - "3000:3000"
-    depends_on:
-      - mongo
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
     # Adiciona o comando para clonar o repositório e instalar dependências
-    build:
-      context: .
-      dockerfile: Dockerfile-app
 
   nginx:
     container_name: nginx
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
     volumes:
         - nginx-html-data:/var/www/html
         - nginx-logs-data:/var/log/nginx
@@ -32,17 +33,14 @@ services:
     ports:
         - "80:80"
         - "443:443"
-    build:
-      context: .
-      dockerfile: Dockerfile-nginx
 
   mongo:
     image: mongo:latest
     container_name: mongo
-    ports:
-      - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    ports:
+      - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
