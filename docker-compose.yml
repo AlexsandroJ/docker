@@ -2,6 +2,8 @@ volumes:
   mongo-data:
   #app-data:
   nginx-html-data:
+  jenkins_home:
+  portainer_data:
 
 services:
   
@@ -21,25 +23,61 @@ services:
     # Adiciona o comando para clonar o repositório e instalar dependências
   
   nginx:
-    #image: nginx:latest
+    image: nginx
     container_name: nginx
-    build:
-      context: .
-      dockerfile: Dockerfile-nginx
+    restart: always
+    #build:
+    # context: .
+    # dockerfile: Dockerfile-nginx
     volumes:
         - nginx-html-data:/usr/share/nginx/html
     ports:
-        - "80:80"
-        - "443:443"
+        - 80:80
+        - 443:443
 
   mongo:
     image: mongo:latest
     container_name: mongo
+    restart: always
     volumes:
       - mongo-data:/data/db
-    ports:
-      - "27017:27017"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=admin
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    container_name: express
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mongo
+      
+      ME_CONFIG_MONGODB_AUTH_USERNAME  : root
+      ME_CONFIG_MONGODB_AUTH_PASSWORD  : example
+    #restart: unless-stopped
+    ports:
+      - 8081:8081
+      
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: jenkins
+    restart: always
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
 
