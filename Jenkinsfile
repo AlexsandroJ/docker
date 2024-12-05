@@ -10,6 +10,7 @@ pipeline{
         stage('Docker Build'){
             steps{
                 echo "Teste Build"
+                script { docker.build('nginx') }
             }
         }
 
