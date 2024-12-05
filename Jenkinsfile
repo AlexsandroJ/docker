@@ -12,11 +12,19 @@ pipeline{
                 echo "Teste Build"
             }
         }
-        
+
+        stage('Tests'){
+            steps{
+                echo "Teste Deploy"
+            }
+        }
+
         stage('Docker Deploy'){
             steps{
                 echo "Teste Deploy"
             }
         }
+
+        
     }
 }
