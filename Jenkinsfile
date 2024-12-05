@@ -1,7 +1,11 @@
 pipeline{
     agent any 
     stages{
-        stage('Inicial'){
+        stage('Get Source'){
+
+        }
+
+        stage('Docker Build'){
             steps{
                 echo "Teste pipelines  "
             }
