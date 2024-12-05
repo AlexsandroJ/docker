@@ -15,11 +15,9 @@ pipeline {
             }
         }
         stage ('Docker Build'){
-            script{
-                sh """
+            sh """
                     echo "end"
                 """
-            }
         }
         /*
         stage('Push') {
