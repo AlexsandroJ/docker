@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
-        IMAGE_NAME = 'seu_usuario_docker_hub/nginx-app'
+        IMAGE_NAME = 'alpine'
     }
 
     stages {
@@ -14,6 +14,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Push') {
             steps {
                 script {
@@ -29,6 +30,6 @@ pipeline {
                     docker.run("${IMAGE_NAME}", '-p 8080:80')
                 }
             }
-        }
+        } */
     }
 }
