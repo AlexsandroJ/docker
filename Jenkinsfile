@@ -1,31 +1,34 @@
-pipeline{
-    agent any 
-    stages{
-        stage('Get Source'){
-            steps{
-                echo "Teste Source"
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+        IMAGE_NAME = 'seu_usuario_docker_hub/nginx-app'
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    docker.build("${IMAGE_NAME}")
+                }
             }
         }
-
-        stage('Docker Build'){
-            steps{
-                echo "Teste nginx"
-                script { docker.build('nginx') }
+        stage('Push') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
+                        docker.image("${IMAGE_NAME}").push()
+                    }
+                }
             }
         }
-
-        stage('Tests'){
-            steps{
-                echo "Teste Deploy"
+        stage('Run') {
+            steps {
+                script {
+                    docker.run("${IMAGE_NAME}", '-p 8080:80')
+                }
             }
         }
-
-        stage('Docker Deploy'){
-            steps{
-                echo "Teste Deploy"
-            }
-        }
-
-        
     }
 }
