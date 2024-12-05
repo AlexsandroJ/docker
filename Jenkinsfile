@@ -13,15 +13,13 @@ pipeline {
                     echo "end"
                 }
             }
-        }/*
-        stage('Build') {
-            steps {
-                script {
-                    docker.build("${IMAGE_NAME}")
-                }
-            }
         }
-        
+        stage ('Docker Build'){
+            sh """
+                docker container run -p 80:80 - p 443:443 nginx
+            """
+    }
+        /*
         stage('Push') {
             steps {
                 script {
