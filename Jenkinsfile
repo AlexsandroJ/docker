@@ -7,7 +7,7 @@ pipeline{
 
         stage('Docker Build'){
             steps{
-                echo "Teste pipelines  "
+                echo "Teste pipelines"
             }
         }
     }
