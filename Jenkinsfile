@@ -14,11 +14,14 @@ pipeline {
                 }
             }
         }
-        stage('Run') {
-            steps {
-                script {
-                    docker.image("${IMAGE_NAME}").pull()
-                }
+        
+        stage('Run Script') { 
+            steps { 
+                sh ''' 
+                    #!/bin/bash 
+                    echo "Hello, World!" 
+                    # Adicione o script que você deseja executar aqui 
+                ''' 
             }
         }
         /*
