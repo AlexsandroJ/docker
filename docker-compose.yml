@@ -57,9 +57,11 @@ services:
       
       ME_CONFIG_MONGODB_AUTH_USERNAME  : root
       ME_CONFIG_MONGODB_AUTH_PASSWORD  : example
-    #restart: unless-stopped
+    restart: always
     ports:
       - 8081:8081
+    depends_on:
+      - mongo
       
   jenkins:
     image: jenkins/jenkins:lts-jdk17
