@@ -64,9 +64,13 @@ services:
       - mongo
       
   jenkins:
-    image: jenkins/jenkins:lts-jdk17
+    #image: jenkins/jenkins:lts-jdk17
     container_name: jenkins
     restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile-jenkins
+
     ports:
       - 8080:8080
       - 50000:50000
