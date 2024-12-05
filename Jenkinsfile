@@ -21,7 +21,7 @@ pipeline {
                     #!/bin/bash 
                     echo "Hello, World!" 
                     # Adicione o script que você deseja executar aqui 
-                    docker -v
+                    git -v
                 ''' 
             }
         }
