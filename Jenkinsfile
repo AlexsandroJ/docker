@@ -14,10 +14,12 @@ pipeline {
                 }
             }
         }
-        stage ('Docker Build'){
-            sh """
-                    echo "end"
-                """
+        stage('Run') {
+            steps {
+                script {
+                    docker.image("${IMAGE_NAME}").pull()
+                }
+            }
         }
         /*
         stage('Push') {
