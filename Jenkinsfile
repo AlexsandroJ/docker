@@ -15,10 +15,12 @@ pipeline {
             }
         }
         stage ('Docker Build'){
-            sh """
-                docker container run -p 80:80 - p 443:443 nginx
-            """
-    }
+            script{
+                sh """
+                    echo "end"
+                """
+            }
+        }
         /*
         stage('Push') {
             steps {
