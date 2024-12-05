@@ -7,6 +7,13 @@ pipeline {
     }
 
     stages {
+        stage('Start') {
+            steps {
+                script {
+                    echo "end"
+                }
+            }
+        }/*
         stage('Build') {
             steps {
                 script {
@@ -14,7 +21,7 @@ pipeline {
                 }
             }
         }
-        /*
+        
         stage('Push') {
             steps {
                 script {
@@ -31,5 +38,12 @@ pipeline {
                 }
             }
         } */
+        stage('End') {
+            steps {
+                script {
+                    echo "end"
+                }
+            }
+        }
     }
 }
