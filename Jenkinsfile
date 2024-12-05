@@ -21,6 +21,8 @@ pipeline {
                     #!/bin/bash 
                     echo "Hello, World!" 
                     # Adicione o script que você deseja executar aqui 
+                    git -v
+                    docker image pull ngninx
                 ''' 
             }
         }
