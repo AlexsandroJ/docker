@@ -1,10 +1,12 @@
 pipeline {
-    stage('Front-end') {
-        agent {
-            docker { image 'node:22.12.0-alpine3.20' }
-        }
-        steps {
-            sh 'node --version'
+    agent {
+        docker { image 'node:22.12.0-alpine3.20' }
+    }
+    stages {
+        stage('Test') {
+            steps {
+                sh 'node --eval "console.log(process.platform,process.env.CI)"'
+            }
         }
     }
 }
