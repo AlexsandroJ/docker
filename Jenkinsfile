@@ -8,7 +8,7 @@ pipeline {
         }
         stage('test 2') {
             steps {
-                sh 'git clone https://github.com/AlexsandroJ/portifolio.git'
+                sh 'git clone https://github.com/AlexsandroJ/portifolio.git .'
             }
         }
         stage('test 3') {
