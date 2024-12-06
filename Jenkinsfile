@@ -10,8 +10,7 @@ pipeline {
         stage('Run build Alpine') {
             steps {
                 sh '''
-                    #!/bin/bash
-                    docker -v
+                    git -v
                 ''' 
             }
         }
