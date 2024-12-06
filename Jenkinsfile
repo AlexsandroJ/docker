@@ -9,11 +9,8 @@ pipeline {
         stage('test 3') {
             steps {
                 script{
-                    """
-                        docker pull alpine
-                    """
+                    sh 'docker pull alpine'
                 }
-                
             }
         }
     }
