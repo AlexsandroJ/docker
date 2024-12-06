@@ -1,12 +1,12 @@
 pipeline {
     agent any
     stages {
-        stage('Back-end') {
+        stage('test 1 ') {
             steps {
                 sh 'git -v'
             }
         }
-        stage('Back-end') {
+        stage('test 2') {
             steps {
                 sh 'docker -v'
             }
