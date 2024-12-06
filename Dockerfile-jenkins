@@ -33,8 +33,3 @@ RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-c
 # Torne o Jenkins o usuário padrão novamente
 USER jenkins
 
-# Exponha a porta padrão do Jenkins
-EXPOSE 8080
-
-# Comando para iniciar o Jenkins
-ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]
