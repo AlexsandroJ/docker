@@ -8,9 +8,12 @@ pipeline {
         }
         stage('test 3') {
             steps {
-                """
-                    docker -v
-                """
+                script{
+                    """
+                        docker -v
+                    """
+                }
+                
             }
         }
     }
