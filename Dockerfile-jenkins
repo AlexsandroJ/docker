@@ -10,7 +10,8 @@ RUN apt-get update -qq && apt-get install -qqy \
     ca-certificates \
     curl \
     gnupg2 \
-    software-properties-common
+    software-properties-common \
+    tini
 
 # Adicione a chave GPG do Docker
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
