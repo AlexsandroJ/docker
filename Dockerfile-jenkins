@@ -4,6 +4,6 @@ USER root
 RUN apt-get update 
 RUN apt-get install -y docker
 RUN apt-get install -y git
-RUN apt-get install -y docker-compose
+RUN apt-get install -y docker-compose-plugin
 # drop back to the regular jenkins user - good practice
 USER jenkins
