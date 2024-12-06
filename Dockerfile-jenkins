@@ -1,13 +1,6 @@
-FROM jenkins/jenkins:2.479.2-jdk17
+FROM jenkins/jenkins:lts-jdk17
+# if we want to install via apt
 USER root
-RUN apt-get update && \
-    apt-get install -y lsb-release && \
-    apt-get update && \
-    apt-get install -y docker-ce-cli docker-ce git docker-compose && \
-    usermod -aG docker jenkins
-
-RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
-
-# Instalar Docker dentro do contêiner Jenkins
-RUN apt-get update && \
-    apt-get install -y docker-ce docker-ce-cli containerd.io && \
+RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose
+# drop back to the regular jenkins user - good practice
+USER jenkins
