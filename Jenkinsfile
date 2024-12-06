@@ -9,7 +9,7 @@ pipeline {
         stage('test 2') {
             steps {
                 sh 'cd portifolio'
-                sh 'docker image build -f Dockerfile-jenkins -t jenkins . --network host'
+                sh 'docker container run -dit --name app -p 3000:3000 nginx'
             }
         }
     }
