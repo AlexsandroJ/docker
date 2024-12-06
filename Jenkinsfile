@@ -12,7 +12,7 @@ pipeline {
                 sh 'ls'
             }
         }
-        stage('test 2') {
+        stage('test 3') {
             steps {
                 sh 'docker -v'
             }
