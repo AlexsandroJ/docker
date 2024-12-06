@@ -1,6 +1,10 @@
 FROM jenkins/jenkins:lts-jdk17
 # if we want to install via apt
 USER root
-RUN apt-get update && apt-get install -y docker-ce docker-ce-cli git docker-compose
+RUN apt-get update 
+RUN apt-get install -y docker-ce
+RUN apt-get install -y git
+RUN apt-get install -y docker-ce-cli
+RUN apt-get install -y docker-compose
 # drop back to the regular jenkins user - good practice
 USER jenkins
