@@ -9,7 +9,12 @@ pipeline {
         stage('test 2') {
             steps {
                 sh 'cd portifolio'
-                sh 'docker container run nginx'
+                sh 'ls'
+            }
+        }
+        stage('test 2') {
+            steps {
+                sh 'docker -v'
             }
         }
     }
