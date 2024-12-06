@@ -13,7 +13,7 @@ pipeline {
             agent {
                 docker { image 'node:22.12.0-alpine3.20' }
             }
-            steps {
+            steps { 
                 sh 'node --version'
             }
         }
