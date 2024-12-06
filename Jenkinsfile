@@ -8,7 +8,9 @@ pipeline {
         }
         stage('test 3') {
             steps {
-                sh 'docker -v'
+                """
+                    docker -v
+                """
             }
         }
     }
