@@ -7,10 +7,10 @@ pipeline {
     }
 
     stages {
-        stage('Start') {
+        stage('Run build Alpine') {
             steps {
                 script {
-                    echo "end"
+                    docker image build . --network host alpine
                 }
             }
         }
