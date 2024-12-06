@@ -4,6 +4,12 @@ pipeline {
         stage('test 1 ') {
             steps {
                 sh 'git -v'
+
+                script{
+                    """
+                       echo "inicio"
+                    """
+                }
             }
         }
         stage('test 3') {
