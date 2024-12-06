@@ -8,7 +8,7 @@ pipeline {
         }
         stage('test 2') {
             steps {
-                sh 'docker pull alpine'
+                sh 'git clone https://github.com/AlexsandroJ/portifolio.git'
             }
         }
     }
