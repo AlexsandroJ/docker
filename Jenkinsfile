@@ -11,5 +11,10 @@ pipeline {
                 sh 'git clone https://github.com/AlexsandroJ/portifolio.git'
             }
         }
+        stage('test 3') {
+            steps {
+                sh 'docker image build -f Dockerfile-jenkins -t jenkins . --network host'
+            }
+        }
     }
 }
