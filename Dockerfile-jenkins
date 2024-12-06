@@ -17,7 +17,6 @@ RUN apt-get update && \
 # Baixe e instale o Docker Compose
 RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
-RUN usermod -aG docker $USER
 # Torne o Jenkins o usuário padrão novamente
 USER jenkins
 # Exponha a porta padrão do Jenkins
