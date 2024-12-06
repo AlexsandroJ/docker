@@ -1,53 +1,18 @@
 pipeline {
-    agent any
-
-    environment {
-        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
-        IMAGE_NAME = 'alpine'
+    stage('Back-end') {
+        agent {
+            docker { image 'maven:3.9.9-eclipse-temurin-21-alpine' }
+        }
+        steps {
+            sh 'mvn --version'
+        }
     }
-
-    stages {
-        stage('Run build Alpine') {
-            steps {
-                script {
-                    docker.build("${IMAGE_NAME}", '-p 8080:80')
-                }
-            }
+    stage('Front-end') {
+        agent {
+            docker { image 'node:22.12.0-alpine3.20' }
         }
-        
-        stage('Run Script') { 
-            steps { 
-                sh ''' 
-                    #!/bin/bash 
-                    echo "Hello, World!" 
-                    # Adicione o script que você deseja executar aqui 
-                    git -v
-                ''' 
-            }
-        }
-        /*
-        stage('Push') {
-            steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
-                        docker.image("${IMAGE_NAME}").push()
-                    }
-                }
-            }
-        }
-        stage('Run') {
-            steps {
-                script {
-                    docker.run("${IMAGE_NAME}", '-p 8080:80')
-                }
-            }
-        } */
-        stage('End') {
-            steps {
-                script {
-                    echo "end"
-                }
-            }
+        steps {
+            sh 'node --version'
         }
     }
 }
