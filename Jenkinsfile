@@ -10,7 +10,7 @@ pipeline {
         stage('Run build Alpine') {
             steps {
                 sh '''
-                    docker image build . --network host alpine
+                    docker -v
                 ''' 
             }
         }
