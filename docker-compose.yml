@@ -5,6 +5,10 @@ volumes:
   jenkins_home:
   portainer_data:
 
+networks:
+  net-mongo:
+  net-jenkins:
+
 services:
   
   #app:
@@ -46,6 +50,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     ports:
       - 27017:27017
+    networks:
+      - net-mongo
 
   mongo-express:
     image: mongo-express
@@ -60,6 +66,8 @@ services:
     restart: always
     ports:
       - 8081:8081
+    networks:
+      - net-mongo
     depends_on:
       - mongo
       
@@ -74,6 +82,8 @@ services:
     ports:
       - 8080:8080
       - 50000:50000
+    networks:
+      - net-jenkins
     volumes:
       - jenkins_home:/var/jenkins_home
 
