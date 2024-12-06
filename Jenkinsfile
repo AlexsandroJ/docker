@@ -8,7 +8,7 @@ pipeline {
         }
         stage('test 2') {
             steps {
-                sh 'docker -v'
+                sh 'docker pull alpine'
             }
         }
     }
