@@ -9,9 +9,9 @@ pipeline {
     stages {
         stage('Run build Alpine') {
             steps {
-                sh '''
-                    git -v
-                ''' 
+                script {
+                    docker.build("${IMAGE_NAME}", '-p 8080:80')
+                }
             }
         }
         
