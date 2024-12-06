@@ -8,7 +8,7 @@ pipeline {
         }
         stage('test 3') {
             steps {
-                sh 'docker container ls'
+                sh 'docker -v'
             }
         }
     }
