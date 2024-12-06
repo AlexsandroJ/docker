@@ -9,8 +9,12 @@ pipeline {
         stage('test 3') {
             steps {
                 script{
-                    sh 'docker pull alpine'
+                    """
+                        docker pull alpine \
+                        docker image build -f Dockerfile-jenkins -t jenkins . --network host
+                    """
                 }
+                
             }
         }
     }
