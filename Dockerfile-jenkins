@@ -1,5 +1,5 @@
 # Use a imagem oficial do Jenkins LTS
-FROM jenkins/jenkins:lts-jdk11
+FROM jenkins/jenkins:lts-jdk17
 # Defina o usuário root para instalar pacotes
 USER root
 # Instale o Docker
