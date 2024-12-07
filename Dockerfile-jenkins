@@ -1,27 +1,22 @@
-# Use a imagem oficial do Jenkins com JDK 11 como base
-FROM jenkins/jenkins:lts-jdk11
+# Use a imagem Alpine como base
+FROM alpine:latest
 
-# Defina o usuário root para instalar pacotes
-USER root
+# Instalar pacotes necessários
+RUN apk add --no-cache \
+    docker \
+    docker-cli \
+    npm \
+    docker-compose \
+    openjdk11-jre-headless \
+    python3 \
+    py3-pip
 
-# Instale o JDK 17
-RUN apt-get update && \
-    apt-get install -y openjdk-17-jdk && \
-    update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+# Instalar Jenkins
+RUN apk add --no-cache jenkins
 
-# Instale dependências necessárias e Docker
-RUN apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg2 \
-    software-properties-common && \
-    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" && \
-    apt-get update && \
-    apt-get install -y docker-ce docker-ce-cli containerd.io
+# Configurar Jenkins
+COPY jenkins_config.xml /usr/share/jenkins/ref/config.xml
+COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/init.groovy
 
-# Baixe e instale o Docker Compose
-RUN curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
-    chmod +x /usr/local/bin/docker-compose
-
+# Iniciar Jenkins
+CMD ["jenkins"]
