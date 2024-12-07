@@ -15,4 +15,4 @@ RUN apk add --no-cache \
 RUN apk add --no-cache jenkins
 
 # Iniciar Jenkins
-
+CMD ["systemctl start jenkins"]
