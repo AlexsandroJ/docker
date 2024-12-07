@@ -60,7 +60,6 @@ services:
       ME_CONFIG_BASICAUTH_USERNAME: root
       ME_CONFIG_BASICAUTH_PASSWORD: example
       ME_CONFIG_MONGODB_SERVER: mongo
-      
       ME_CONFIG_MONGODB_AUTH_USERNAME  : root
       ME_CONFIG_MONGODB_AUTH_PASSWORD  : example
     restart: always
@@ -75,10 +74,6 @@ services:
     #image: jenkins/jenkins:lts-jdk17
     container_name: jenkins
     restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile-jenkins
-
     ports:
       - 8080:8080
       - 50000:50000
