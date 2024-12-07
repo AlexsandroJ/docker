@@ -35,7 +35,7 @@ services:
       context: .
       dockerfile: Dockerfile-nginx
     volumes:
-        - nginx-html-data:/usr/share/nginx/html
+      - nginx-html-data:/usr/share/nginx/html
     ports:
       - 80:80
       - 443:443
