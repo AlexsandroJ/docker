@@ -27,12 +27,12 @@ services:
     # Adiciona o comando para clonar o repositório e instalar dependências
   
   nginx:
-    #image: nginx
+    image: nginx
     container_name: nginx
     restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile-nginx
+    #build:
+    #  context: .
+    #  dockerfile: Dockerfile-nginx
     volumes:
         - nginx-html-data:/usr/share/nginx/html
     ports:
