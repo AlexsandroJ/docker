@@ -1,3 +1,5 @@
+version: '3'
+
 volumes:
   mongo-data:
   #app-data:
@@ -26,7 +28,7 @@ services:
   #    - MONGO_INITDB_ROOT_USERNAME=admin
   #    - MONGO_INITDB_ROOT_PASSWORD=admin
     # Adiciona o comando para clonar o repositório e instalar dependências
-    
+
   mongo:
     image: mongo:latest
     container_name: mongo
