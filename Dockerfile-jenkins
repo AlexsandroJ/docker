@@ -7,7 +7,7 @@ RUN apk add --no-cache \
     docker-cli \
     npm \
     docker-compose \
-    openjdk11-jre-headless \
+    openjdk17-jre-headless \
     python3 \
     py3-pip
 
