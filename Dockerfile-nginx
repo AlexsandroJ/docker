@@ -11,8 +11,6 @@ RUN rm -f index.html
 RUN git clone https://github.com/AlexsandroJ/portifolio.git /tmp/repo
 
 RUN cp -r /tmp/repo/* /tmp/repo/.[!.]* . && rm -rf /tmp/repo
-# Expor a porta padrão do Nginx
-EXPOSE 80
 
 # Comando para rodar o Nginx
 CMD ["nginx", "-g", "daemon off;"]
