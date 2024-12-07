@@ -1,9 +1,7 @@
 # Usar a imagem base oficial do Nginx
 FROM nginx:latest
-
 # Instalar o Git
 RUN apt-get update && apt-get install -y git
-
 # Definir o diretório de trabalho
 WORKDIR /usr/share/nginx/html
 RUN rm -f index.html 
@@ -11,6 +9,5 @@ RUN rm -f index.html
 RUN git clone https://github.com/AlexsandroJ/portifolio.git /tmp/repo
 
 RUN cp -r /tmp/repo/* /tmp/repo/.[!.]* . && rm -rf /tmp/repo
-
 # Comando para rodar o Nginx
 CMD ["nginx", "-g", "daemon off;"]
