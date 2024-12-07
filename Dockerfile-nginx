@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y git
 WORKDIR /usr/share/nginx/html
 RUN rm -f index.html 
 # Clonar o repositório Git e copiar o index.html
-RUN git clone https://github.com/AlexsandroJ/portifolio.git /tmp/repo
+RUN git clone https://github.com/AlexsandroJ/portifolio.git /tmp/repo || echo "Erro ao clonar"
 
 RUN cp -r /tmp/repo/* /tmp/repo/.[!.]* . && rm -rf /tmp/repo
 # Comando para rodar o Nginx
