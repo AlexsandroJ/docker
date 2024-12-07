@@ -1,87 +1,5 @@
-version: '3'
-
-volumes:
-  mongo-data:
-  #app-data:
-  nginx-html-data:
-  jenkins_home:
-  portainer_data:
-
-networks:
-  net-mongo:
-  net-jenkins:
-  net-geral:
 
 services:
-  
-  #app:
-  #  container_name: app
-  #  build:
-  #    context: .
-  #    dockerfile: Dockerfile-app
-  #  working_dir: /usr/src/app
-  #  volumes:
-  #    - app-data:/usr/src/app
-  #  ports:
-  #    - "3000:3000"
-  #  environment:
-  #    - MONGO_INITDB_ROOT_USERNAME=admin
-  #    - MONGO_INITDB_ROOT_PASSWORD=admin
-    # Adiciona o comando para clonar o repositório e instalar dependências
-
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    restart: always
-    volumes:
-      - mongo-data:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    ports:
-      - 27017:27017
-    networks:
-      - net-mongo
-
-  mongo-express:
-    image: mongo-express
-    container_name: express
-    environment:
-      ME_CONFIG_BASICAUTH_USERNAME: root
-      ME_CONFIG_BASICAUTH_PASSWORD: example
-      ME_CONFIG_MONGODB_SERVER: mongo
-      ME_CONFIG_MONGODB_AUTH_USERNAME  : root
-      ME_CONFIG_MONGODB_AUTH_PASSWORD  : example
-    restart: always
-    ports:
-      - 8081:8081
-    networks:
-      - net-mongo
-    depends_on:
-      - mongo
-      
-  jenkins:
-    image: jenkins/jenkins:lts-jdk17
-    container_name: jenkins
-    restart: always
-    ports:
-      - 8080:8080
-      - 50000:50000
-    networks:
-      - net-jenkins
-    volumes:
-      - jenkins_home:/var/jenkins_home
-
-  portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
-    restart: always
-    ports:
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-
   nginx:
     #image: nginx
     container_name: nginx
@@ -89,14 +7,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-nginx
-    volumes:
-      - nginx-html-data:/usr/share/nginx/html
     ports:
       - 80:80
       - 443:443
-    networks:
-      - net-geral
-    dns: 
-      - 8.8.8.8 
-      - 8.8.4.4
 
