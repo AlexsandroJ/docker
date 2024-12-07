@@ -1,0 +1,77 @@
+sudo usermod -aG docker $USER
+
+sudo usermod -aG jenkins $USER
+
+ip -br -c a
+
+docker container run -dit --name name_container --hostname host_name node
+
+docker container attach teste_name
+
+Read escape sequence
+<CTRL> + <P> + <Q> sair do container
+
+ ssh-keygen -t ed25519 -P "" -f ~/.ssh/id_ed25519
+
+Dokerfile
+
+FROM -> Diz qual é a origem da imagem (qual imagem base)
+COPY -> Copia arquivos ou diretorios de origem local para a imagem do Container
+RUN -> Executa um comando dentro do conatiner
+ADD -> Quase igual o copy, mas aceita URL e alterar os permissionamentos
+EXPOSE -> Expoe uma porta para o docker daemon (REDE)
+ENTRYPOINT -> Ponto de Entrada do container (O que mantem o container vivo)
+CMD -> Argumentos para o entrypoint
+
+
+bildar uma imagem usando dockerfile
+docker image build -t pj . --network host
+
+subir o container
+docker container run -dit --name app -p 3000:3000 pj
+
+
+docker-compose up -d
+
+buscar informações filtrada
+docker system info | grep CPUs
+
+Este comando abre um shell interativo (/bin/bash) no contêiner web.
+docker exec -it nginx /bin/bash
+
+pull de uma aplicação dentro de um container
+docker exec -t nginx /bin/bash -c "git pull"
+
+ativar altocompletar
+source <(kubectl completion bash)
+
+
+ver as dependencias
+npm outdated
+
+resolver as dependencias
+npm audit
+
+docker exec -it dazzling_darwin cat /var/jenkins_home/secrets/initialAdminPassword
+
+docker container run -dit --name app -p 8080:8080 -p 50000:50000 --network host 
+
+docker image build -f Dockerfile-jenkins -t jenkins . --network host
+
+docker image build -f Dockerfile-nginx -t nginx . --network host
+
+docker run -p 80:80 nginx
+
+docker exec -it app cat docker -v
+
+docker exec -it appp git -v
+
+docker pull jenkins/jnlp-agent-docker
+
+jenkins puro
+docker run --name appp --network host -p 8080:8080 -p 50000:50000 --restart=on-failure -v jenkins_home:/var/jenkins_home jenkins/jnlp-agent-docker
+
+docker run -dit --network host -p 8080:8080 -p 50000:50000 --restart=on-failure jenkins
+
+
+docker exec -it romantic_shtern jenkins
