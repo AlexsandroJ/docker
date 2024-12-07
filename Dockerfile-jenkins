@@ -14,7 +14,7 @@ RUN apk add --no-cache \
 # Instalar Jenkins
 RUN apk add --no-cache jenkins
 
-# Configurar Jenkins
+# Copiar o arquivo de configuração do Jenkins
 COPY jenkins_config.xml /usr/share/jenkins/ref/config.xml
 COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/init.groovy
 
