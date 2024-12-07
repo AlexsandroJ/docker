@@ -8,6 +8,7 @@ volumes:
 networks:
   net-mongo:
   net-jenkins:
+  net-geral:
 
 services:
   
@@ -35,12 +36,11 @@ services:
       dockerfile: Dockerfile-nginx
     volumes:
         - nginx-html-data:/usr/share/nginx/html
-    dns: 
-      - 8.8.8.8 
-      - 8.8.4.4
     ports:
       - 80:80
       - 443:443
+    networks:
+      - net-geral
 
   mongo:
     image: mongo:latest
