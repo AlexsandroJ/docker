@@ -1,39 +1,13 @@
 # Usar a imagem base oficial do Nginx
 FROM nginx:latest
-
-# Instalar dependências básicas (Git, Curl, etc.)
-RUN apt-get update && apt-get install -y git curl
-
-# Instalar o Node.js (versão LTS recomendada)
-RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
-    apt-get install -y nodejs
-
-# Definir o diretório de trabalho temporário para clonar o repositório
-WORKDIR /tmp/repo
-
-# Clonar o repositório Git contendo o projeto Next.js
-RUN git clone https://github.com/AlexsandroJ/frontESS.git . || echo "Erro ao clonar"
-
-# Instalar as dependências do projeto Next.js
-RUN npm install
-
-# Executar o build do projeto Next.js
-RUN npm run build
-
-# Exportar o projeto Next.js para produção (gera arquivos estáticos no diretório 'out')
-RUN npm run export
-
-# Definir o diretório de trabalho para o Nginx
+# Instalar o Git
+RUN apt-get update && apt-get install -y git
+# Definir o diretório de trabalho
 WORKDIR /usr/share/nginx/html
+RUN rm -f index.html 
+# Clonar o repositório Git e copiar o index.html
+RUN git clone https://github.com/AlexsandroJ/portifolio.git /tmp/repo || echo "Erro ao clonar"
 
-# Remover o index.html padrão do Nginx
-RUN rm -f index.html
-
-# Copiar os arquivos gerados pelo Next.js para o diretório do Nginx
-COPY --from=0 /tmp/repo/out/* .
-
-# Configurar o Nginx para servir os arquivos estáticos corretamente
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-
+RUN cp -r /tmp/repo/* /tmp/repo/.[!.]* . && rm -rf /tmp/repo
 # Comando para rodar o Nginx
 CMD ["nginx", "-g", "daemon off;"]
