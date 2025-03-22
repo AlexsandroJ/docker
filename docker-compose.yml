@@ -27,7 +27,16 @@ services:
   #    - MONGO_INITDB_ROOT_USERNAME=admin
   #    - MONGO_INITDB_ROOT_PASSWORD=admin
     # Adiciona o comando para clonar o repositório e instalar dependências
-
+ nextjs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile-next
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: always
+    
   mongo:
     image: mongo:latest
     container_name: mongo
