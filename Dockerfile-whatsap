@@ -1,18 +1,26 @@
-FROM ubuntu
+# Use uma imagem oficial do Node.js (recomendado)
+FROM node:18
 
-# Atualizar repositórios e instalar Node.js, npm e Git
-RUN apt update \
-    && apt install -y nodejs npm git nano
+# Instalar dependências do sistema necessárias para o whatsapp-web.js / puppeteer
+RUN apt-get update && apt-get install -y \
+    git \
+    wget \
+    libgbm-dev \
+    libx11-xcb-dev \
+    libxcomposite-dev \
+    libasound2-dev \
+    fonts-noto \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Definir o diretório de trabalho
+# Diretório de trabalho
 WORKDIR /usr/src/app
 
-RUN git clone https://github.com/AlexsandroJ/WhatsapWebServer.git . \
-    && npm install
-    
-# Expor a porta que a aplicação usará
+# Copiar código do repositório diretamente (ou usar git clone se preferir)
+RUN git clone https://github.com/AlexsandroJ/WhatsapWebServer.git  . && \
+    npm install
+
+# Expor a porta da aplicação
 EXPOSE 5001
 
 # Comando para iniciar a aplicação
-CMD ["npm","start"]
-
+CMD ["npm", "start"]
