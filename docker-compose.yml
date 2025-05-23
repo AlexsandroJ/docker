@@ -7,7 +7,7 @@ networks:
   net-geral:
 
 services:
- 
+
   whatsap:
     container_name: whatsap
     build:
@@ -22,8 +22,6 @@ services:
       - API_URL=http://api:3001
       - DEV=false
     restart: always
-    depends_on:
-        - api
 
   portainer:
     image: portainer/portainer-ce
