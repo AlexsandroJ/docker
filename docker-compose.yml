@@ -79,23 +79,6 @@ services:
     depends_on:
         - api
 
-  next:
-    container_name: next
-    build:
-      context: .
-      dockerfile: Dockerfile-next
-    ports:
-      - 80:80
-    networks:
-      - net-geral
-    environment:
-      - NEXT_PUBLIC_API_URL=http://api:3001
-    restart: always
-    pull_policy: always
-    depends_on:
-        - api
-        - whatsap
-
   portainer:
     image: portainer/portainer-ce
     container_name: portainer
