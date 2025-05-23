@@ -1,6 +1,7 @@
 
 volumes:
   mongo-data:
+  portainer_data:
 
 networks:
   net-geral:
