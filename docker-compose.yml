@@ -49,9 +49,19 @@ services:
     networks:
       - net-geral
     environment:
+      - JWT_SECRET=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9JWT
       - NODE_ENV=production
       - PORT=3001
       - API_URL=http://api:3001
+      - MIN_USERNAME_LENGTH=6
+      - COLLECTION_NAME_CLIENT_ZAP=collection_zap
+      - COLLECTION_NAME_CLIENT_PEDIDOS=collection_pedidos
+      - COLLECTION_NAME_CLIENT_PAGAMENTOS=collection_pagamentos
+
+      - GOOGLE_CLIENT_ID=566156554431-2qmrdv6eagv44rq6n07c1mvupak41v6t.apps.googleusercontent.com
+      - GOOGLE_CLIENT_SECRET=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
+      - REDIRECT_URI=http://localhost:3000/testApi
+
       - DB_USER=root
       - DB_PASS=example
       - DB_HOST=mongo
