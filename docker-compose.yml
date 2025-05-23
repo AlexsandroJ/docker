@@ -51,7 +51,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3001
-
+      - API_URL=http://api:3001
       - DB_USER=root
       - DB_PASS=example
       - DB_HOST=mongo
@@ -61,23 +61,6 @@ services:
     restart: always
     depends_on:
         - mongo
-
-  whatsap:
-    container_name: whatsap
-    build:
-      context: .
-      dockerfile: Dockerfile-whatsap
-    ports:
-      - "5001:5001"
-    networks:
-      - net-geral
-    environment:
-      - NODE_ENV=production
-      - API_URL=http://api:3001
-      - DEV=false
-    restart: always
-    depends_on:
-        - api
 
   portainer:
     image: portainer/portainer-ce
