@@ -53,7 +53,7 @@ services:
       - NODE_ENV=production
       - PORT=3001
       - API_URL=http://api:3001
-      - MIN_USERNAME_LENGTH=6
+      - MIN_SIZE_PASSWORD=6
       - COLLECTION_NAME_CLIENT_ZAP=collection_zap
       - COLLECTION_NAME_CLIENT_PEDIDOS=collection_pedidos
       - COLLECTION_NAME_CLIENT_PAGAMENTOS=collection_pagamentos
