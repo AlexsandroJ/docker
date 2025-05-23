@@ -7,6 +7,70 @@ networks:
   net-geral:
 
 services:
+ 
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+    networks:
+      - net-geral
+    restart: always
+
+  mongo-express:
+    image: mongo-express
+    container_name: express
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_AUTH_USERNAME  : root
+      ME_CONFIG_MONGODB_AUTH_PASSWORD  : example
+    restart: always
+    ports:
+      - 8081:8081
+    networks:
+      - net-geral
+    depends_on:
+      - mongo
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+    ports:
+      - "3001:3001"
+    networks:
+      - net-geral
+    environment:
+      - JWT_SECRET=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9JWT
+      - NODE_ENV=production
+      - PORT=3001
+      - API_URL=http://api:3001
+      - MIN_SIZE_PASSWORD=6
+      - COLLECTION_NAME_CLIENT_ZAP=collection_zap
+      - COLLECTION_NAME_CLIENT_PEDIDOS=collection_pedidos
+      - COLLECTION_NAME_CLIENT_PAGAMENTOS=collection_pagamentos
+
+      - GOOGLE_CLIENT_ID=566156554431-2qmrdv6eagv44rq6n07c1mvupak41v6t.apps.googleusercontent.com
+      - GOOGLE_CLIENT_SECRET=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
+      - REDIRECT_URI=http://localhost:3000/testApi
+
+      - DB_USER=root
+      - DB_PASS=example
+      - DB_HOST=mongo
+      - DB_PORT=27017
+      - DB_NAME=tests
+      - DEV=false
+    restart: always
+    depends_on:
+        - mongo
 
   whatsap:
     container_name: whatsap
@@ -22,6 +86,8 @@ services:
       - API_URL=http://api:3001
       - DEV=false
     restart: always
+    depends_on:
+        - api
 
   portainer:
     image: portainer/portainer-ce
