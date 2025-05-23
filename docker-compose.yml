@@ -1,46 +1,15 @@
 
 volumes:
   mongo-data:
-  #app-data:
-  nginx-html-data:
-  #jenkins_home:
-  portainer_data:
 
 networks:
-  net-mongo:
-  #net-jenkins:
   net-geral:
 
 services:
-  
-  #app:
-  #  container_name: app
-  #  build:
-  #    context: .
-  #    dockerfile: Dockerfile-app
-  #  working_dir: /usr/src/app
-  #  volumes:
-  #    - app-data:/usr/src/app
-  #  ports:
-  #    - "3000:3000"
-  #  environment:
-  #    - MONGO_INITDB_ROOT_USERNAME=admin
-  #    - MONGO_INITDB_ROOT_PASSWORD=admin
-    # Adiciona o comando para clonar o repositório e instalar dependências
-  nextjs-app:
-    build:
-      context: .
-      dockerfile: Dockerfile-next
-    ports:
-      - 3000:3000
-    environment:
-      - NODE_ENV=production
-    restart: always
-    
+ 
   mongo:
     image: mongo:latest
     container_name: mongo
-    restart: always
     volumes:
       - mongo-data:/data/db
     environment:
@@ -49,7 +18,8 @@ services:
     ports:
       - 27017:27017
     networks:
-      - net-mongo
+      - net-geral
+    restart: always
 
   mongo-express:
     image: mongo-express
@@ -64,47 +34,63 @@ services:
     ports:
       - 8081:8081
     networks:
-      - net-mongo
+      - net-geral
     depends_on:
       - mongo
-  
-  #jenkins:
-   # image: jenkins/jenkins:lts-jdk17
-    #container_name: jenkins
-    #restart: always
-    #ports:
-    #  - 8080:8080
-    #  - 50000:50000
-    #networks:
-    #  - net-jenkins
-    #volumes:
-    #  - jenkins_home:/var/jenkins_home
 
-  portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
-    restart: always
-    ports:
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-
-  nginx:
-    #image: nginx
-    container_name: nginx
-    restart: always
-    volumes:
-      - nginx-html-data:/usr/share/nginx/html
+  api:
+    container_name: api
     build:
       context: .
-      dockerfile: Dockerfile-nginx
+      dockerfile: Dockerfile-api
     ports:
-      - 80:80
-      - 443:443
+      - "3001:3001"
     networks:
       - net-geral
-    dns: 
-      - 8.8.8.8 
-      - 8.8.4.4
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
 
+      - DB_USER=root
+      - DB_PASS=example
+      - DB_HOST=mongo
+      - DB_PORT=27017
+      - DB_NAME=tests
+      - DEV=false
+    restart: always
+    depends_on:
+        - mongo
+
+  whatsap:
+    container_name: whatsap
+    build:
+      context: .
+      dockerfile: Dockerfile-whatsap
+    ports:
+      - "5001:5001"
+    networks:
+      - net-geral
+    environment:
+      - NODE_ENV=production
+      - API_URL=http://api:3001
+      - DEV=false
+    restart: always
+    depends_on:
+        - api
+
+  next:
+    container_name: next
+    build:
+      context: .
+      dockerfile: Dockerfile-next
+    ports:
+      - 80:80
+    networks:
+      - net-geral
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api:3001
+    restart: always
+    pull_policy: always
+    depends_on:
+        - api
+        - whatsap

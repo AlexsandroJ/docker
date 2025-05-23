@@ -1,34 +1,36 @@
 # Stage 1: Build the application
-FROM node:18-alpine AS builder
+FROM node:18 AS builder
 
 # Define working directory
 WORKDIR /app
 
-# Install Git (necessário para clonar o repositório)
-RUN apk add --no-cache git
+# Instalar Git (necessário para clonar repositório)
+RUN apt-get update && apt-get install -y git
 
-# Clone the repository
-RUN git clone https://github.com/AlexsandroJ/frontESS.git .
+# Clona o repositório GitHub
+RUN git clone https://github.com/AlexsandroJ/dashboardProjects.git  .
 
-# Install dependencies
-RUN npm install
+# Instala dependências - forma mais segura
+RUN npm ci
 
-# Build the Next.js application
+# Faz o build da aplicação Next.js
 RUN npm run build
 
-# Stage 2: Serve the application
-FROM node:18-alpine AS runner
+# Stage 2: Servir a aplicação
+FROM node:18 AS runner
 
-# Define working directory
+# Diretório de trabalho
 WORKDIR /app
 
-# Copy only the necessary files from the builder stage
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+# Cria usuário não-root para segurança
+RUN groupadd --system appgroup && useradd --system -g appgroup appuser
+USER appuser
+COPY --chown=appuser:appgroup --from=builder /app/.next ./.next
+COPY --chown=appuser:appgroup --from=builder /app/node_modules ./node_modules
+COPY --chown=appuser:appgroup --from=builder /app/package.json ./package.json
 
-# Expose the port that Next.js runs on
-EXPOSE 3000
+# Expor porta
+EXPOSE 80
 
-# Start the application
+# Iniciar a aplicação
 CMD ["npm", "start"]
