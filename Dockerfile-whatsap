@@ -3,7 +3,7 @@ FROM node:18
 
 # Instalar dependências do sistema necessárias para o whatsapp-web.js / puppeteer
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+    apt-get install -y \
     libgbm1 \
     libx11-xcb1 \
     libxcomposite1 \
