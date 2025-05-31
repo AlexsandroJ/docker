@@ -29,17 +29,8 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      - name: Build and Push Image API
-        run: |
-          docker build -f Dockerfile-api -t $DOCKER_USER/api:${{ env.version }} .
-          docker push $DOCKER_USER/api:${{ env.version }}
-
       - name: Build and Push Image WHATSAP
         run: |
           docker build -f Dockerfile-whatsap -t $DOCKER_USER/whatsap:${{ env.version }} .
           docker push $DOCKER_USER/whatsap:${{ env.version }}
 
-      - name: Build and Push Image NEXT
-        run: |
-          docker build -f Dockerfile-next -t $DOCKER_USER/next:${{ env.version }} .
-          docker push $DOCKER_USER/next:${{ env.version }}
