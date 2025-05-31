@@ -1,4 +1,4 @@
-name: Build and Push Docker HUB All Images
+name: Build and Push Docker HUB WHATSAP Images
 
 on:
   workflow_dispatch:  # Evento manual de acionamento da pipeline
