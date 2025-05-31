@@ -138,7 +138,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: alexsandrojsilva0/api:latest # Substitua
+          image: alexsandrojsilva0/api:94bbbbc # Substitua
           ports:
             - containerPort: 3001
           env:
@@ -209,7 +209,7 @@ spec:
     spec:
       containers:
         - name: whatsap
-          image: alexsandrojsilva0/whatsap:latest
+          image: alexsandrojsilva0/whatsap:94bbbbc
           ports:
             - containerPort: 5001
           env:
@@ -252,7 +252,7 @@ spec:
     spec:
       containers:
         - name: next
-          image: alexsandrojsilva0/next:latest
+          image: alexsandrojsilva0/next:0d558b2
           ports:
             - containerPort: 80
           env:

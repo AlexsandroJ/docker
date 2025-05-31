@@ -75,3 +75,5 @@ docker run -dit --network host -p 8080:8080 -p 50000:50000 --restart=on-failure 
 
 
 docker exec -it romantic_shtern jenkins
+
+docker pull alexsandrojsilva0/api:94bbbbc
