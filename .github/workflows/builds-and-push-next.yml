@@ -1,4 +1,4 @@
-name: Build and Push Docker Images
+name: Build and Push Docker NEXT Image
 
 on:
   workflow_dispatch:  # Evento manual de acionamento da pipeline
