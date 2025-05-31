@@ -1,5 +1,5 @@
 # Use uma imagem oficial do Node.js (recomendado)
-FROM node:18
+FROM node:22
 
 # Instalar dependências do sistema necessárias para o whatsapp-web.js / puppeteer
 RUN apt-get update && \
