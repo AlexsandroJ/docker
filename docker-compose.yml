@@ -22,6 +22,23 @@ services:
       - net-geral
     restart: always
 
+  mongo-express:
+    image: mongo-express
+    container_name: express
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_AUTH_USERNAME  : root
+      ME_CONFIG_MONGODB_AUTH_PASSWORD  : example
+    restart: always
+    ports:
+      - 8081:8081
+    networks:
+      - net-geral
+    depends_on:
+      - mongo
+
   api:
     container_name: api
     build:
@@ -71,3 +88,30 @@ services:
     restart: always
     depends_on:
         - api
+
+  next:
+    container_name: next
+    build:
+      context: .
+      dockerfile: Dockerfile-next
+    ports:
+      - 80:80
+    networks:
+      - net-geral
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api:3001
+    restart: always
+    pull_policy: always
+    depends_on:
+        - api
+        - whatsap
+
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
