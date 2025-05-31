@@ -208,4 +208,4 @@ curl -vk https://3.84.197.170:6443/api  \
 # Criar deployment
 kubectl apply -f deploy.yaml
 
-  
+  172.24.96.1:30412

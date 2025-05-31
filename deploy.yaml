@@ -65,6 +65,7 @@ kind: Service
 metadata:
   name: mongo
 spec:
+  type: LoadBalancer
   selector:
     app: mongo
   ports:
@@ -111,6 +112,7 @@ kind: Service
 metadata:
   name: express
 spec:
+  type: LoadBalancer
   selector:
     app: express
   ports:
@@ -181,6 +183,7 @@ kind: Service
 metadata:
   name: api
 spec:
+  type: LoadBalancer
   selector:
     app: api
   ports:
@@ -223,6 +226,7 @@ kind: Service
 metadata:
   name: whatsap
 spec:
+  type: LoadBalancer
   selector:
     app: whatsap
   ports:
