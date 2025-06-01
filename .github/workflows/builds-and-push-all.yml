@@ -1,12 +1,12 @@
 name: Build and Push Docker HUB All Images
 
 on:
-  workflow_dispatch:  # Evento manual de acionamento da pipeline
+  workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy to'  # Descrição do input
+        description: 'Environment to deploy to'
         required: true
-        default: 'start'  # Valor padrão
+        default: 'start'
 
 jobs:
   build-and-push:
@@ -18,10 +18,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set version from git tag
+      - name: Set version from git tag or commit hash
         id: vars
         run: |
-          echo "version=$(git describe --tags)" >> $GITHUB_ENV
+          version=$(git describe --tags 2>/dev/null)
+          if [[ $? -ne 0 ]]; then
+            version=$(git rev-parse --short HEAD)
+          fi
+          echo "version=$version" >> $GITHUB_ENV
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -31,15 +35,18 @@ jobs:
 
       - name: Build and Push Image API
         run: |
-          docker build -f Dockerfile-api -t $DOCKER_USER/api:${{ env.version }} .
+          docker build -f Dockerfile-api -t $DOCKER_USER/api:${{ env.version }} -t $DOCKER_USER/api:latest .
           docker push $DOCKER_USER/api:${{ env.version }}
+          docker push $DOCKER_USER/api:latest
 
       - name: Build and Push Image WHATSAP
         run: |
-          docker build -f Dockerfile-whatsap -t $DOCKER_USER/whatsap:${{ env.version }} .
+          docker build -f Dockerfile-whatsap -t $DOCKER_USER/whatsap:${{ env.version }} -t $DOCKER_USER/whatsap:latest .
           docker push $DOCKER_USER/whatsap:${{ env.version }}
+          docker push $DOCKER_USER/whatsap:latest
 
       - name: Build and Push Image NEXT
         run: |
-          docker build -f Dockerfile-next -t $DOCKER_USER/next:${{ env.version }} .
+          docker build -f Dockerfile-next -t $DOCKER_USER/next:${{ env.version }} -t $DOCKER_USER/next:latest .
           docker push $DOCKER_USER/next:${{ env.version }}
+          docker push $DOCKER_USER/next:latest
