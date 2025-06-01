@@ -254,7 +254,7 @@ spec:
         - name: next
           image: alexsandrojsilva0/next:0d558b2
           ports:
-            - containerPort: 80
+            - containerPort: 8000
           env:
             - name: NEXT_PUBLIC_API_URL
               value: "http://api:3001"
@@ -270,8 +270,8 @@ spec:
     app: next
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 8000
+      targetPort: 8000
 
 # Portainer
 ---
