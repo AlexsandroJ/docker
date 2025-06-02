@@ -41,9 +41,10 @@ services:
 
   api:
     container_name: api
-    build:
-      context: .
-      dockerfile: Dockerfile-api
+    image: alexsandrojsilva0/api:82c4c16
+    #build:
+    #  context: .
+    #  dockerfile: Dockerfile-api
     ports:
       - "3001:3001"
     networks:
@@ -74,9 +75,10 @@ services:
 
   whatsap:
     container_name: whatsap
-    build:
-      context: .
-      dockerfile: Dockerfile-whatsap
+    image: alexsandrojsilva0/whatsap:82c4c16
+    #build:
+    #  context: .
+    #  dockerfile: Dockerfile-whatsap
     ports:
       - "5001:5001"
     networks:
@@ -91,9 +93,10 @@ services:
 
   next:
     container_name: next
-    build:
-      context: .
-      dockerfile: Dockerfile-next
+    image: alexsandrojsilva0/next:9a52ea5
+    #build:
+    #  context: .
+    #  dockerfile: Dockerfile-next
     ports:
       - 3000:3000
     networks:
