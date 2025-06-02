@@ -10,6 +10,10 @@ RUN apt-get update && apt-get install -y git
 # Clona o repositório GitHub
 RUN git clone https://github.com/AlexsandroJ/dashboardProjects.git  .
 
+# Definir ARG e converter para ENV
+ARG NEXT_PUBLIC_APIBASEURL
+ENV NEXT_PUBLIC_APIBASEURL=${NEXT_PUBLIC_APIBASEURL}
+
 # Instala dependências - forma mais segura
 RUN npm ci
 
