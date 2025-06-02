@@ -72,7 +72,7 @@ services:
     pull_policy: always
     depends_on:
         - api
-        - whatsap
+        #- whatsap
 
   #portainer:
   #  image: portainer/portainer-ce
