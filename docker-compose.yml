@@ -95,11 +95,11 @@ services:
       context: .
       dockerfile: Dockerfile-next
     ports:
-      - 80:80
+      - 3000:3000
     networks:
       - net-geral
     environment:
-      - NEXT_PUBLIC_API_URL=http://api:3001
+      - NEXT_PUBLIC_APIBASEURL=http://api:3001
     restart: always
     pull_policy: always
     depends_on:
