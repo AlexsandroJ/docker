@@ -22,23 +22,6 @@ services:
       - net-geral
     restart: always
 
-  mongo-express:
-    image: mongo-express
-    container_name: express
-    environment:
-      ME_CONFIG_BASICAUTH_USERNAME: root
-      ME_CONFIG_BASICAUTH_PASSWORD: example
-      ME_CONFIG_MONGODB_SERVER: mongo
-      ME_CONFIG_MONGODB_AUTH_USERNAME  : root
-      ME_CONFIG_MONGODB_AUTH_PASSWORD  : example
-    restart: always
-    ports:
-      - 8081:8081
-    networks:
-      - net-geral
-    depends_on:
-      - mongo
-
   api:
     container_name: api
     image: alexsandrojsilva0/api:82c4c16
@@ -73,24 +56,6 @@ services:
     depends_on:
         - mongo
 
-  whatsap:
-    container_name: whatsap
-    image: alexsandrojsilva0/whatsap:82c4c16
-    #build:
-    #  context: .
-    #  dockerfile: Dockerfile-whatsap
-    ports:
-      - "5001:5001"
-    networks:
-      - net-geral
-    environment:
-      - NODE_ENV=production
-      - API_URL=http://api:3001
-      - DEV=false
-    restart: always
-    depends_on:
-        - api
-
   next:
     container_name: next
     image: alexsandrojsilva0/next:9a52ea5
@@ -109,12 +74,12 @@ services:
         - api
         - whatsap
 
-  portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
-    restart: always
-    ports:
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
+  #portainer:
+  #  image: portainer/portainer-ce
+  #  container_name: portainer
+  #  restart: always
+  #  ports:
+  #    - "9000:9000"
+  #  volumes:
+  #    - /var/run/docker.sock:/var/run/docker.sock
+  #    - portainer_data:/data
