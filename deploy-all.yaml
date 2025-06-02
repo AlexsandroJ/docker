@@ -252,12 +252,15 @@ spec:
     spec:
       containers:
         - name: next
-          image: alexsandrojsilva0/next:ce4c253
+          #image: alexsandrojsilva0/next:ce4c253
+          build:
+            context: .
+            dockerfile: Dockerfile-next
           ports:
             - containerPort: 3000
           env:
             - name: NEXT_PUBLIC_APIBASEURL
-              value: "http://172.24.96.165:3001"
+              value: "http://api:3001"
 
 ---
 apiVersion: v1
