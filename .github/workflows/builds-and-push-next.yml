@@ -31,5 +31,5 @@ jobs:
 
       - name: Build and Push Image NEXT
         run: |
-          docker build --build-arg NEXT_PUBLIC_APIBASEURL="http://api:3001"  -f Dockerfile-next -t $DOCKER_USER/next:${{ env.version }} .
+          docker build --build-arg NEXT_PUBLIC_APIBASEURL="http://172.24.96.165:3001"  -f Dockerfile-next -t $DOCKER_USER/next:${{ env.version }} .
           docker push $DOCKER_USER/next:${{ env.version }}
