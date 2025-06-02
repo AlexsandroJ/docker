@@ -58,10 +58,10 @@ services:
 
   next:
     container_name: next
-    image: alexsandrojsilva0/next:ce4c253
-    #build:
-    #  context: .
-    #  dockerfile: Dockerfile-next
+    #image: alexsandrojsilva0/next:ce4c253
+    build:
+      context: .
+      dockerfile: Dockerfile-next
     ports:
       - 3000:3000
     networks:
