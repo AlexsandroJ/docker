@@ -252,7 +252,7 @@ spec:
     spec:
       containers:
         - name: next
-          image: alexsandrojsilva0/next:ce4c253
+          image: alexsandrojsilva0/next:6d6a765
           ports:
             - containerPort: 3000
           env:
