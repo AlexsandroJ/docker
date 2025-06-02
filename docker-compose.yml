@@ -58,7 +58,7 @@ services:
 
   next:
     container_name: next
-    image: alexsandrojsilva0/next:9a52ea5
+    image: alexsandrojsilva0/next:ce4c253
     #build:
     #  context: .
     #  dockerfile: Dockerfile-next
@@ -72,7 +72,7 @@ services:
     pull_policy: always
     depends_on:
         - api
-        #- whatsap
+        - whatsap
 
   #portainer:
   #  image: portainer/portainer-ce
