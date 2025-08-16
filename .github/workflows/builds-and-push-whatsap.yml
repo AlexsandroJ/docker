@@ -3,10 +3,10 @@ name: Build and Push Docker HUB WHATSAP Images
 on:
   workflow_dispatch:  # Evento manual de acionamento da pipeline
     inputs:
-      environment:
-        description: 'Environment to deploy to'  # Descrição do input
+      bump_type:
+        description: 'Type of version bump (major, minor, patch)'
         required: true
-        default: 'start'  # Valor padrão
+        default: 'patch'
 
 jobs:
   build-and-push:
@@ -18,10 +18,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set version from commit hash
-        id: vars
+      - name: Read current version
+        id: version
         run: |
-          echo "version=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          if [ ! -f VERSION ]; then
+            echo "1.0.0" > VERSION  # Initialize version file if it doesn't exist
+          fi
+          echo "current_version=$(cat VERSION)" >> $GITHUB_ENV
+
+      - name: Bump version
+        id: bump
+        run: |
+          current_version=${{ env.current_version }}
+          bump_type=${{ inputs.bump_type }}
+          IFS='.' read -r major minor patch <<< "$current_version"
+          case "$bump_type" in
+            major) major=$((major + 1)); minor=0; patch=0 ;;
+            minor) minor=$((minor + 1)); patch=0 ;;
+            patch) patch=$((patch + 1)) ;;
+            *) echo "Invalid bump type"; exit 1 ;;
+          esac
+          new_version="$major.$minor.$patch"
+          echo "$new_version" > VERSION
+          echo "new_version=$new_version" >> $GITHUB_ENV
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -31,6 +50,13 @@ jobs:
 
       - name: Build and Push Image WHATSAP
         run: |
-          docker build -f Dockerfile-whatsap -t $DOCKER_USER/whatsap:${{ env.version }} .
-          docker push $DOCKER_USER/whatsap:${{ env.version }}
+          docker build -f Dockerfile-whatsap -t $DOCKER_USER/whatsap:${{ env.new_version }} .
+          docker push $DOCKER_USER/whatsap:${{ env.new_version }}
 
+          # Tag the same image as `latest`
+          docker tag $DOCKER_USER/whatsap:${{ env.new_version }} $DOCKER_USER/whatsap:latest
+          docker push $DOCKER_USER/whatsap:latest
+
+      - name: Print deployed version
+        run: |
+          echo "Deployed version: ${{ env.new_version }}"
