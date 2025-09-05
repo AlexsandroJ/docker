@@ -226,6 +226,8 @@ curl -vk https://3.84.197.170:6443/api  \
 # Criar deployment
 kubectl apply -f deploy.yaml
 
+kubectl apply -f deploy-api.yaml
+
   172.24.96.1:30412
 
   scp user@172.24.96.165:/etc/rancher/k3s/k3s.yaml ~/.kube/config
@@ -246,3 +248,27 @@ kubectl proxy
 
 # deletar deployments
 kubectl delete deployments --all
+
+kubectl delete services --all
+
+#
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: webhook-config
+webhooks:
+  - name: webhook.example.com
+    clientConfig:
+      url: "https://192.168.1.172:3001/api/webhook"
+      insecureSkipTLSVerify: true  # Ignora a validação do certificado TLS
+    rules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE", "DELETE"]
+        resources: ["pods", "deployments", "services"]
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    timeoutSeconds: 5
+
+# install kube-apiserver
+snap install kube-apiserver
