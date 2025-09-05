@@ -50,12 +50,12 @@ jobs:
 
       - name: Build and Push Image apiVoltz
         run: |
-          docker build -f Dockerfile-apiVoltz -t $DOCKER_USER/apiVoltz:${{ env.new_version }} .
-          docker push $DOCKER_USER/apiVoltz:${{ env.new_version }}
+          docker build -f Dockerfile-apivoltz -t $DOCKER_USER/apivoltz:${{ env.new_version }} .
+          docker push $DOCKER_USER/apivoltz:${{ env.new_version }}
 
           # Tag the same image as `latest`
-          docker tag $DOCKER_USER/apiVoltz:${{ env.new_version }} $DOCKER_USER/apiVoltz:latest
-          docker push $DOCKER_USER/apiVoltz:latest
+          docker tag $DOCKER_USER/apivoltz:${{ env.new_version }} $DOCKER_USER/apivoltz:latest
+          docker push $DOCKER_USER/apivoltz:latest
 
       - name: Print deployed version
         run: |
