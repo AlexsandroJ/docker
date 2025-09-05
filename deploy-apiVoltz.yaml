@@ -137,7 +137,7 @@ spec:
             - name: PORT
               value: "3001"
             - name: API_URL
-              value: "http://api:3001"
+              value: "http://api:3001/api/history"
             - name: MIN_SIZE_PASSWORD
               value: "6"
             - name: COLLECTION_NAME_CLIENT_ZAP
