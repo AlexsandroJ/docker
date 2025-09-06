@@ -228,6 +228,8 @@ kubectl apply -f deploy.yaml
 
 kubectl apply -f deploy-api.yaml
 
+kubectl apply -f deploy-apivoltz.yaml
+
   172.24.96.1:30412
 
   scp user@172.24.96.165:/etc/rancher/k3s/k3s.yaml ~/.kube/config
