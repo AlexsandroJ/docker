@@ -136,6 +136,8 @@ spec:
               value: "production"
             - name: PORT
               value: "3001"
+            - name: CLUSTER_API_URI_SERVER
+              value: "https://kubernetes.default.svc"
             - name: API_URL
               value: "http://api:3001"
             - name: MIN_SIZE_PASSWORD
