@@ -108,8 +108,9 @@ spec:
       port: 8081
       targetPort: 8081
 
-      
-# kubectl-proxy-deployment.yaml
+
+# proxy
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -130,12 +131,12 @@ spec:
       - name: kubectl-proxy
         image: bitnami/kubectl:latest
         command: ["kubectl", "proxy", "--port=8001", "--address=0.0.0.0", "--accept-hosts=^.*$$"]
-        # Aceita qualquer host — útil para acesso via Service ou outros Pods
         ports:
         - containerPort: 8001
       restartPolicy: Always
 
-# kubectl-proxy-service.yaml
+# proxy service
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -147,10 +148,9 @@ spec:
     app: kubectl-proxy
   ports:
     - protocol: TCP
-      port: 8001        # Porta do Service (dentro do cluster)
-      targetPort: 8001  # Porta do container
-  type: ClusterIP       # Só interno — perfeito para testes
-
+      port: 8001
+      targetPort: 8001
+  type: ClusterIP
 
 # API Node.js
 ---
