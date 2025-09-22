@@ -141,16 +141,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kubectl-proxy-service
-  labels:
-    app: kubectl-proxy
 spec:
+  type: LoadBalancer
   selector:
     app: kubectl-proxy
   ports:
     - protocol: TCP
       port: 8001
       targetPort: 8001
-  type: ClusterIP
+      
 
 # API Node.js
 ---
