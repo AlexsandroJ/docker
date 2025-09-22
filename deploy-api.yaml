@@ -137,7 +137,7 @@ spec:
             - name: PORT
               value: "3001"
             - name: CLUSTER_API_URI_SERVER
-              value: "https://kubernetes.default.svc:8001"
+              value: "https://10.43.0.1:8001"
             - name: API_URL
               value: "http://api:3001"
             - name: MIN_SIZE_PASSWORD
