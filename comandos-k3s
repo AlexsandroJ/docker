@@ -230,6 +230,8 @@ kubectl apply -f deploy-api.yaml
 
 kubectl apply -f deploy-apivoltz.yaml
 
+kubectl apply -f audit-sink-deployments-services.yaml
+
   172.24.96.1:30412
 
   scp user@172.24.96.165:/etc/rancher/k3s/k3s.yaml ~/.kube/config
@@ -249,7 +251,7 @@ sudo k3s server \
 kubectl proxy
 
 # deletar deployments
-kubectl delete deployments --all
+kubectl delete deployments --all | kubectl delete services --all
 
 kubectl delete services --all
 
