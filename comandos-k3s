@@ -276,3 +276,5 @@ webhooks:
 
 # install kube-apiserver
 snap install kube-apiserver
+
+kubectl run nginx-pod --image=nginx:latest --port=80
