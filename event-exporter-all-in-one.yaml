@@ -52,7 +52,7 @@ data:
     receivers:
       - name: "webhook"
         webhook:
-          endpoint: "http://api:3001/api/webhook"
+          endpoint: "http://192.168.1.160:3001/api/webhook"
           layout:
             type: "{{ .Type }}"
             reason: "{{ .Reason }}"
