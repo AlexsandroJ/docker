@@ -1,0 +1,13 @@
+# 1. Instalar dashboard
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+
+# 2. Criar usuário admin
+kubectl create serviceaccount -n kubernetes-dashboard admin-user
+kubectl create clusterrolebinding -n kubernetes-dashboard admin-user --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:admin-user
+
+# 3. Pegar token
+kubectl -n kubernetes-dashboard create token admin-user
+
+# 4. Acessar via NodePort
+kubectl -n kubernetes-dashboard patch svc kubernetes-dashboard -p '{"spec": {"type": "NodePort"}}'
+kubectl -n kubernetes-dashboard get svc kubernetes-dashboard

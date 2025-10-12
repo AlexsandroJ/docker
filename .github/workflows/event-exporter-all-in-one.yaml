@@ -1,0 +1,126 @@
+---
+# ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: event-exporter
+  namespace: default
+---
+# ClusterRole (permissões para ler eventos em todo o cluster)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: event-exporter
+rules:
+- apiGroups: [""]
+  resources: ["events", "pods", "services", "persistentvolumeclaims", "nodes"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets", "daemonsets", "replicasets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "list", "watch"]
+---
+# ClusterRoleBinding (vincula a conta de serviço à role)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: event-exporter
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: event-exporter
+subjects:
+- kind: ServiceAccount
+  name: event-exporter
+  namespace: default
+---
+# ConfigMap com a configuração do exporter
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: event-exporter-config
+  namespace: default
+data:
+  config.yaml: |
+    logLevel: debug
+    route:
+      routes:
+      - match:
+          - receiver: "webhook"
+    receivers:
+      - name: "webhook"
+        webhook:
+          endpoint: "http://192.168.1.160:3001/api/webhook"
+          layout:
+            type: "{{ .Type }}"
+            reason: "{{ .Reason }}"
+            message: "{{ .Message }}"
+            namespace: "{{ .Namespace }}"
+            name: "{{ .InvolvedObject.Name }}"
+            kind: "{{ .InvolvedObject.Kind }}"
+            api_version: "{{ .InvolvedObject.APIVersion }}"
+            uid: "{{ .InvolvedObject.UID }}"
+            count: "{{ .Count }}"
+            first_timestamp: "{{ .FirstTimestamp }}"
+            last_timestamp: "{{ .LastTimestamp }}"
+            event_time: "{{ .EventTime }}"
+            source_component: "{{ .Source.Component }}"
+            source_host: "{{ .Source.Host }}"
+            reporting_controller: "{{ .ReportingController }}"
+            reporting_instance: "{{ .ReportingInstance }}"
+            action: "{{ .Action }}"
+            annotations: "{{ toJson .Annotations }}"
+            series:
+              count: "{{ if .Series }}{{ .Series.Count }}{{ else }}null{{ end }}"
+              last_observed_time: "{{ if .Series }}{{ .Series.LastObservedTime }}{{ else }}null{{ end }}"
+            involved_object:
+              name: "{{ .InvolvedObject.Name }}"
+              namespace: "{{ .InvolvedObject.Namespace }}"
+              kind: "{{ .InvolvedObject.Kind }}"
+              uid: "{{ .InvolvedObject.UID }}"
+              api_version: "{{ .InvolvedObject.APIVersion }}"
+              resource_version: "{{ .InvolvedObject.ResourceVersion }}"
+              field_path: "{{ .InvolvedObject.FieldPath }}"
+            timestamp: "{{ .LastTimestamp }}" 
+---
+# Deployment do event-exporter
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-event-exporter
+  namespace: default
+  labels:
+    app: event-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-exporter
+  template:
+    metadata:
+      labels:
+        app: event-exporter
+    spec:
+      serviceAccountName: event-exporter
+      containers:
+      - name: event-exporter
+        image: ghcr.io/resmoio/kubernetes-event-exporter:v1.7
+        args:
+        - "-conf"
+        - "/data/config.yaml"
+        volumeMounts:
+        - name: config
+          mountPath: /data
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "50m"
+          limits:
+            memory: "64Mi"
+            cpu: "100m"
+      volumes:
+      - name: config
+        configMap:
+          name: event-exporter-config
