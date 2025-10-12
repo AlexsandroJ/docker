@@ -278,3 +278,5 @@ webhooks:
 snap install kube-apiserver
 
 kubectl run nginx-pod --image=nginx:latest --port=80
+
+kubectl exec -it api-685564c4c4-tckqf -- curl https://kubernetes.default.svc
