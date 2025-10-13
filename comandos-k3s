@@ -279,4 +279,4 @@ snap install kube-apiserver
 
 kubectl run nginx-pod --image=nginx:latest --port=80
 
-kubectl exec -it api-685564c4c4-tckqf -- curl https://kubernetes.default.svc
+kubectl exec -it api-857f974f84-f29kj -- curl https://localhost:8001

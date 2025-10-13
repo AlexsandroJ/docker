@@ -140,7 +140,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kubectl-proxy-service
+  name: kubectl-proxy
 spec:
   type: LoadBalancer
   selector:
