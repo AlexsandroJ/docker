@@ -192,7 +192,7 @@ spec:
       labels:
         app: api
     spec:
-      serviceAccountName: api-sa  # <-- IMPORTANTE: usar o SA customizado
+      serviceAccountName: api-access  # <-- IMPORTANTE: usar o SA customizado
       containers:
         - name: api
           image: alexsandrojsilva0/api:latest
