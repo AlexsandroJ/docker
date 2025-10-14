@@ -1,0 +1,40 @@
+# Next.js Frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: next
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: next
+  template:
+    metadata:
+      labels:
+        app: next
+    spec:
+      containers:
+        - name: next
+          image: alexsandrojsilva0/next:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NEXT_PUBLIC_APIBASEURL
+              value: "http://api:3001"
+            - name: NEXT_PUBLIC_APIBASEURL_ZAP
+              value: "http://api:3001"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: next
+spec:
+  type: LoadBalancer
+  selector:
+    app: next
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

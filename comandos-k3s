@@ -255,28 +255,18 @@ kubectl delete deployments --all | kubectl delete services --all
 
 kubectl delete services --all
 
-#
-apiVersion: admissionregistration.k8s.io/v1
-kind: ValidatingWebhookConfiguration
-metadata:
-  name: webhook-config
-webhooks:
-  - name: webhook.example.com
-    clientConfig:
-      url: "https://192.168.1.172:3001/api/webhook"
-      insecureSkipTLSVerify: true  # Ignora a validação do certificado TLS
-    rules:
-      - apiGroups: [""]
-        apiVersions: ["v1"]
-        operations: ["CREATE", "UPDATE", "DELETE"]
-        resources: ["pods", "deployments", "services"]
-    admissionReviewVersions: ["v1"]
-    sideEffects: None
-    timeoutSeconds: 5
+# No nó master do k3s
+sudo cat /var/lib/rancher/k3s/server/tls/server-ca.crt
+
+
+# extrair token do secret
+kubectl get secret api-access-token -n default -o jsonpath='{.data.token}' | base64 -d
+# extrair certificado do secret
+kubectl get secret api-access-token -n default -o jsonpath='{.data.ca\.crt}' | base64 -d
 
 # install kube-apiserver
 snap install kube-apiserver
 
 kubectl run nginx-pod --image=nginx:latest --port=80
 
-kubectl exec -it api-857f974f84-f29kj -- curl https://localhost:8001
+kubectl exec -it api-857f974f84-mqvfz  -- curl http://kubectl-proxy:8001
