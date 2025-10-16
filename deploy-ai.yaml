@@ -1,30 +1,18 @@
-# Namespace dedicado (opcional, mas recomendado)
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ollama
-
----
-# PersistentVolumeClaim para armazenar modelos
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ollama-pvc
-  namespace: ollama
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi  # Ajuste conforme necessidade: 8B ~10GB, 70B ~40-50GB+
-
+      storage: 10Gi
 ---
-# Deployment do Ollama com initContainer para pré-carregar modelo
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ollama
-  namespace: ollama
+  name: ollama-tinyllama
   labels:
     app: ollama
 spec:
@@ -37,69 +25,44 @@ spec:
       labels:
         app: ollama
     spec:
-      # Garante que o volume seja acessível pelo usuário do container
-      securityContext:
-        fsGroup: 1000  # Define o grupo do volume
-      initContainers:
-        - name: pull-model
-          image: ollama/ollama:latest
-          command: ["/bin/sh", "-c"]
-          args:
-            - ollama pull tinyllama:latest  # Altere conforme seu modelo desejado
-          volumeMounts:
-            - name: models
-              mountPath: /root/.ollama
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
       containers:
         - name: ollama
           image: ollama/ollama:latest
           ports:
             - containerPort: 11434
-              name: api
+              name: ollama-api
           env:
             - name: OLLAMA_HOST
               value: "0.0.0.0"
             - name: OLLAMA_MODELS
               value: "/root/.ollama/models"
           volumeMounts:
-            - name: models
+            - name: ollama-storage
               mountPath: /root/.ollama
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-          resources:
-            requests:
-              cpu: "2"
-              memory: "8Gi"
-            limits:
-              cpu: "4"
-              memory: "16Gi"
-              # Descomente abaixo se tiver GPU NVIDIA e o device plugin instalado
-              # nvidia.com/gpu: 1
+          command:
+            - /bin/sh
+            - -c
+            - |
+              ollama serve &
+              sleep 5
+              ollama pull tinyllama:latest
+              wait
       volumes:
-        - name: models
+        - name: ollama-storage
           persistentVolumeClaim:
             claimName: ollama-pvc
-      # Descomente se seus nodes com GPU tiverem taints
-      # tolerations:
-      #   - key: "nvidia.com/gpu"
-      #     operator: "Exists"
-      #     effect: "NoSchedule"
-
+      restartPolicy: Always
 ---
-# Service para expor a API do Ollama dentro do cluster
 apiVersion: v1
 kind: Service
 metadata:
   name: ollama-service
-  namespace: ollama
 spec:
+  type: NodePort
   selector:
     app: ollama
   ports:
     - protocol: TCP
       port: 11434
       targetPort: 11434
-  type: ClusterIP  # Altere para "LoadBalancer" ou "NodePort" para acesso externo
+      nodePort: 31434  # opcional: você pode omitir para atribuição automática
