@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: ai
+  name: default
 
 ---
 # PersistentVolumeClaim para armazenar modelos (evita baixar toda vez)
@@ -11,7 +11,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ollama-pvc
-  namespace: ai
+  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
@@ -25,7 +25,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ollama
-  namespace: ai
+  namespace: default
   labels:
     app: ollama
 spec:
@@ -80,7 +80,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ollama-service
-  namespace: ai
+  namespace: default
 spec:
   selector:
     app: ollama
@@ -96,7 +96,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: ollama-pull-model
-  namespace: ai
+  namespace: default
 spec:
   template:
     spec:
