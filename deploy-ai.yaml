@@ -1,23 +1,30 @@
-# PersistentVolumeClaim para armazenar modelos (evita baixar toda vez)
+# Namespace dedicado (opcional, mas recomendado)
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ollama
+
+---
+# PersistentVolumeClaim para armazenar modelos
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ollama-pvc
-  namespace: default
+  namespace: ollama
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi  # Ajuste conforme o modelo (8B ~5-10GB, 70B ~40GB+)
+      storage: 10Gi  # Ajuste conforme necessidade: 8B ~10GB, 70B ~40-50GB+
 
 ---
-# Deployment do Ollama
+# Deployment do Ollama com initContainer para pré-carregar modelo
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ollama
-  namespace: default
+  namespace: ollama
   labels:
     app: ollama
 spec:
@@ -30,6 +37,21 @@ spec:
       labels:
         app: ollama
     spec:
+      # Garante que o volume seja acessível pelo usuário do container
+      securityContext:
+        fsGroup: 1000  # Define o grupo do volume
+      initContainers:
+        - name: pull-model
+          image: ollama/ollama:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - ollama pull tinyllama:latest  # Altere conforme seu modelo desejado
+          volumeMounts:
+            - name: models
+              mountPath: /root/.ollama
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
       containers:
         - name: ollama
           image: ollama/ollama:latest
@@ -37,42 +59,42 @@ spec:
             - containerPort: 11434
               name: api
           env:
-            # Força o Ollama a escutar em todas as interfaces (necessário no k8s)
             - name: OLLAMA_HOST
               value: "0.0.0.0"
-            # (Opcional) Especifica o modelo a ser pré-carregado
             - name: OLLAMA_MODELS
               value: "/root/.ollama/models"
           volumeMounts:
             - name: models
               mountPath: /root/.ollama
-          # (Opcional) Recursos — ajuste conforme sua GPU/CPU
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
           resources:
-            limits:
-              cpu: "4"
-              memory: "16Gi"
-              # Se tiver GPU NVIDIA, descomente abaixo:
-              # nvidia.com/gpu: 1
             requests:
               cpu: "2"
               memory: "8Gi"
+            limits:
+              cpu: "4"
+              memory: "16Gi"
+              # Descomente abaixo se tiver GPU NVIDIA e o device plugin instalado
+              # nvidia.com/gpu: 1
       volumes:
         - name: models
           persistentVolumeClaim:
             claimName: ollama-pvc
-      # (Opcional) Tolerations para nodes com GPU
+      # Descomente se seus nodes com GPU tiverem taints
       # tolerations:
       #   - key: "nvidia.com/gpu"
       #     operator: "Exists"
       #     effect: "NoSchedule"
 
 ---
-# Service para expor internamente (ou externamente com LoadBalancer/NodePort)
+# Service para expor a API do Ollama dentro do cluster
 apiVersion: v1
 kind: Service
 metadata:
   name: ollama-service
-  namespace: default
+  namespace: ollama
 spec:
   selector:
     app: ollama
@@ -80,31 +102,4 @@ spec:
     - protocol: TCP
       port: 11434
       targetPort: 11434
-  type: ClusterIP  # Use "LoadBalancer" ou "NodePort" se quiser acesso externo
-
----
-# (Opcional) Job para pré-carregar um modelo
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: ollama-pull-model
-  namespace: default
-spec:
-  template:
-    spec:
-      containers:
-        - name: pull-model
-          image: ollama/ollama:latest
-          command: ["/bin/sh", "-c"]
-          args:
-            - |
-              ollama pull llama3.1:8b
-          volumeMounts:
-            - name: models
-              mountPath: /root/.ollama
-      volumes:
-        - name: models
-          persistentVolumeClaim:
-            claimName: ollama-pvc
-      restartPolicy: OnFailure
-  backoffLimit: 4
+  type: ClusterIP  # Altere para "LoadBalancer" ou "NodePort" para acesso externo
