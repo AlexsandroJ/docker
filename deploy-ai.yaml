@@ -45,7 +45,7 @@ spec:
             - |
               ollama serve &
               sleep 5
-              ollama pull tinyllama:latest
+              ollama run cnmoro/Qwen2.5-0.5B-Portuguese-v1:q4_k_m
               wait
       volumes:
         - name: ollama-storage

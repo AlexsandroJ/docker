@@ -270,3 +270,9 @@ snap install kube-apiserver
 kubectl run nginx-pod --image=nginx:latest --port=80
 
 kubectl exec -it api-857f974f84-mqvfz  -- curl http://kubectl-proxy:8001
+
+curl https://8e5734d820eb-10-244-15-205-31434.saci.r.killercoda.com/api/generate -d '{
+  "model": "tinyllama",
+  "prompt": "Defina o que é uma branch em Git.",
+  "stream": false
+}'
