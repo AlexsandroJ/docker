@@ -228,7 +228,8 @@ kubectl apply -f deploy.yaml
 
 kubectl apply -f deploy-api.yaml
 
-kubectl apply -f deploy-apivoltz.yaml
+kubectl apply -f event-exporter-all-in-one.yaml 
+kubectl apply -f deploy-api-https-test.yaml
 
 kubectl apply -f audit-sink-deployments-services.yaml
 
@@ -276,3 +277,19 @@ curl https://8e5734d820eb-10-244-15-205-31434.saci.r.killercoda.com/api/generate
   "prompt": "Defina o que é uma branch em Git.",
   "stream": false
 }'
+
+curl https://ab38adf213db-10-244-9-87-31434.saci.r.killercoda.com/api/chat -d '{
+  "model": "cnmoro/Qwen2.5-0.5B-Portuguese-v1:q4_k_m",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Escreva uma breve introdução sobre LLMs (Large Language Models) e suas aplicações."
+    }
+  ],
+  "stream": false
+}'
+
+kubectl exec -it ollama-tinyllama-7cdd4697f-24c7r -- sh
+
+#Ver as variáveis de ambiente diretamente do manifesto do Deployment:
+kubectl get deployment  whatsap-68f4e73ae6931728648903bb-6d4898b7d9-55gcz -o jsonpath='{.spec.template.spec.containers[0].env}'h

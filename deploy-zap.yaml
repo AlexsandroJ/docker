@@ -31,6 +31,14 @@ spec:
               value: "http://api:3001"
             - name: DEV
               value: "false"
+            - name: API_KEY_GROQ_AI
+              value: "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"
+            - name: API_AI_LINK
+              value: "https://api.groq.com"
+            - name: MODEL
+              value: "llama-3.1-8b-instant"
+            - name: MAX_TOKENS
+              value: 500
 
 ---
 apiVersion: v1
