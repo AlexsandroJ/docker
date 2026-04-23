@@ -130,40 +130,34 @@ spec:
           ports:
             - containerPort: 3001
           env:
-            - name: JWT_SECRET
-              value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9JWT"
-            - name: NODE_ENV
-              value: "production"
             - name: PORT
               value: "3001"
-            - name: API_URL
-              value: "http://apivoltz:3001"
-            - name: MIN_SIZE_PASSWORD
-              value: "6"
-            - name: COLLECTION_NAME_CLIENT_ZAP
-              value: "collection_zap"
-            - name: COLLECTION_NAME_CLIENT_PEDIDOS
-              value: "collection_pedidos"
-            - name: COLLECTION_NAME_CLIENT_PAGAMENTOS
-              value: "collection_pagamentos"
-            - name: GOOGLE_CLIENT_ID
-              value: "566156554431-2qmrdv6eagv44rq6n07c1mvupak41v6t.apps.googleusercontent.com"
-            - name: GOOGLE_CLIENT_SECRET
-              value: "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"
-            - name: REDIRECT_URI
-              value: "http://localhost:3000/testApi"
+            - name: PORT_HTTP
+              value: "3001"
+            - name: PORT_HTTPS
+              value: "443"
             - name: DB_USER
-              value: "root"
+              value: "ajs6"
             - name: DB_PASS
-              value: "example"
+              value: "r9e3h7lyrZZAppdO"
             - name: DB_HOST
-              value: "mongo"
+              value: "cluster0.39wrbwh.mongodb.net"
             - name: DB_PORT
               value: "27017"
             - name: DB_NAME
-              value: "tests"
+              value: "Cluster0"
             - name: DEV
               value: "false"
+            - name: API_URL
+              value: "http://localhost:3001"
+            - name: BASE_BATTERY_ID
+              value: "0x120"
+            - name: BASE_CONTROLLER_ID
+              value: "0x300"
+            - name: MQTT_BROKER
+              value: "mqtt://broker.hivemq.com"
+            - name: MQTT_TOPIC
+              value: "moto/telemetria"
 
 ---
 apiVersion: v1
