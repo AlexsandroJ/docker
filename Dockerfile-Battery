@@ -1,0 +1,100 @@
+# Atualizar pacotes do sistema
+apt update && sudo apt upgrade -y
+
+# Instalar dependências básicas
+DEBIAN_FRONTEND=noninteractive sudo apt install -y python3 python3-pip python3-venv git wget unzip
+
+
+# Clonar repositório do BatteryML
+git clone https://github.com/microsoft/BatteryML.git
+cd BatteryML
+
+# 1. Cria o ambiente virtual chamado 'venv'
+python3 -m venv venv
+
+# 2. Ativa o ambiente
+source venv/bin/activate
+
+# 3. Instalar dependências do BatteryML
+pip install -r requirements.txt
+# 4. Instalar o BatteryML como um pacote Python
+pip install .
+
+# ⚠️ Instalar PyTorch (necessário para modelos deep learning)
+# Acesse https://pytorch.org/get-started/locally/ para o comando correto
+# Exemplo para CPU (sem GPU):
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
+
+
+# Voltar ao diretório base e clonar BatteryLife
+cd ..
+git clone https://github.com/Ruifeng-Tan/BatteryLife.git
+cd BatteryLife
+
+# Instalar dependências do BatteryLife
+pip install -r requirements.txt
+pip install .
+
+
+# Baixar dataset CALCE como exemplo
+batteryml download CALCE ./datasets/raw/CALCE
+
+# Pré-processar o dataset
+batteryml preprocess CALCE ./datasets/raw/CALCE ./datasets/processed/CALCE
+
+
+
+# SSH para o cluster SLURM (ajuste o hostname e usuário conforme necessário)
+ssh ajs6@slurm-client1.cin.ufpe.br
+
+# Solicitar recursos para execução interativa (exemplo: 8GB RAM, 4 CPUs, 1 GPU, partição debug)
+salloc --mem 8G -c 4 --gpus 1 -p debug
+
+
+#SBATCH --mem 8G
+#SBATCH -c 4
+#SBATCH -p debug
+#SBATCH --gpus=1
+#SBATCH --mail-type=FAIL,END
+#SBATCH --mail-user=ajs6@cin.ufpe.br
+
+
+#carregar versão python
+module load Python/3.10
+#criar ambiente
+python -m venv $HOME/venv
+#ativar ambiente
+source $HOME/venv/bin/activate
+
+# Atualizar pacotes do sistema
+pip install --upgrade pip
+
+#instalar pacotes desejados
+# Clonar repositório do BatteryML
+git clone https://github.com/microsoft/BatteryML.git
+cd BatteryML
+# Instalar dependências do BatteryML
+pip install -r requirements.txt
+
+
+# Instalar torch 
+pip install torch==2.4.1 torchvision torchaudio --index-url https://pytorch.org
+
+# Instalar o BatteryML como um pacote Python
+pip install .
+
+# Voltar ao diretório base e clonar BatteryLife
+cd ..
+git clone https://github.com/Ruifeng-Tan/BatteryLife.git
+cd BatteryLife
+# Instalar dependências do BatteryLife
+pip install -r requirements.txt
+
+
+# Baixar dataset CALCE como exemplo
+batteryml download CALCE ./datasets/raw/CALCE
+
+# Pré-processar o dataset
+batteryml preprocess CALCE ./datasets/raw/CALCE ./datasets/processed/CALCE
+

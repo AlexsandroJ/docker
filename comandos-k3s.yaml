@@ -293,3 +293,21 @@ kubectl exec -it ollama-tinyllama-7cdd4697f-24c7r -- sh
 
 #Ver as variáveis de ambiente diretamente do manifesto do Deployment:
 kubectl get deployment  whatsap-68f4e73ae6931728648903bb-6d4898b7d9-55gcz -o jsonpath='{.spec.template.spec.containers[0].env}'h
+
+
+
+
+
+
+
+
+# desativar https
+echo "apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: disable-https-redirect
+  namespace: default
+spec:
+  redirectScheme:
+    scheme: \"http\"
+    permanent: false" | kubectl apply -f -

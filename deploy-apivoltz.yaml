@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
         - name: mongo
-          image: mongo:latest
+          image: mongo:4.4
           ports:
             - containerPort: 27017
           env:
@@ -113,19 +113,19 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: apivoltz
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api
+      app: apivoltz
   template:
     metadata:
       labels:
-        app: api
+        app: apivoltz
     spec:
       containers:
-        - name: api
+        - name: apivoltz
           image: alexsandrojsilva0/apivoltz:latest # Substitua
           ports:
             - containerPort: 3001
@@ -137,7 +137,7 @@ spec:
             - name: PORT
               value: "3001"
             - name: API_URL
-              value: "http://api:3001"
+              value: "http://apivoltz:3001"
             - name: MIN_SIZE_PASSWORD
               value: "6"
             - name: COLLECTION_NAME_CLIENT_ZAP
@@ -169,11 +169,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: api
+  name: apivoltz
 spec:
   type: LoadBalancer
   selector:
-    app: api
+    app: apivoltz
   ports:
     - protocol: TCP
       port: 3001
