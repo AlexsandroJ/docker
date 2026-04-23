@@ -296,8 +296,8 @@ kubectl get deployment  whatsap-68f4e73ae6931728648903bb-6d4898b7d9-55gcz -o jso
 
 
 
-
-
+# acessar o config do cluster
+cat /etc/rancher/k3s/k3s.yaml
 
 
 
