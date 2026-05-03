@@ -149,7 +149,7 @@ spec:
             - name: DEV
               value: "false"
             - name: API_URL
-              value: "http://localhost:3001"
+              value: "http://api:3001"
             - name: BASE_BATTERY_ID
               value: "0x120"
             - name: BASE_CONTROLLER_ID

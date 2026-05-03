@@ -311,3 +311,26 @@ spec:
   redirectScheme:
     scheme: \"http\"
     permanent: false" | kubectl apply -f -
+
+
+
+
+kubectl apply -f mosquitto-stack.yaml
+# 3. Verifique os pods
+clear && kubectl get all -n iot-monitoring
+
+
+kubectl logs  mosquitto-f9c97fcb8-pjhkx -n iot-monitoring
+
+
+kubectl exec -it deployment/mosquitto -n iot-monitoring -- mosquitto_pub -h localhost -t "teste/sensor" -m "valor123"
+
+
+kubectl delete deployments --all -n iot-monitoring | kubectl delete services --all -n iot-monitoring
+
+
+# Subscribe
+mosquitto_sub -h localhost -p 31883 -t "teste/#" -v &
+
+# Publish
+mosquitto_pub -h localhost -p 31883 -t "teste/killercoda" -m "funciona!"
