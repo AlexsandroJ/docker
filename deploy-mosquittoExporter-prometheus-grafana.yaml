@@ -117,6 +117,17 @@ spec:
     port: 9090
     targetPort: 9090
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
 # GRAFANA DATASOURCE PROVISIONING
 apiVersion: v1
 kind: ConfigMap
