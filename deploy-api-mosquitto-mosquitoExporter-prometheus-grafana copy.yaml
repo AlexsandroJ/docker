@@ -256,8 +256,8 @@ spec:
         - name: grafana-data
           mountPath: /var/lib/grafana
         resources:
-          requests: { cpu: 200m, memory: 512Mi }
-          limits:   { cpu: 500m, memory: 512Mi }
+          requests: { cpu: 500m, memory: 1Gi }
+          limits:   { cpu: 900m, memory: 1Gi }
       volumes:
       - name: datasources
         configMap:
