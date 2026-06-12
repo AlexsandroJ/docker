@@ -1,5 +1,6 @@
-
+# ==========================================
 # MOSQUITTO CONFIG
+# ==========================================
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,19 +8,15 @@ metadata:
   namespace: default
 data:
   mosquitto.conf: |
-    # Listener TCP padrão (para dispositivos IoT, mosquitto_pub/sub)
     listener 1883
     allow_anonymous true
-    
-    # Listener WebSocket para navegadores (HiveMQ Demo)
     listener 8083
     protocol websockets
     allow_anonymous true
-    
-    # Logs e persistência
     log_type all
     log_dest stdout
     persistence false
+
 ---
 # MOSQUITTO DEPLOYMENT
 apiVersion: apps/v1
@@ -54,14 +51,16 @@ spec:
       - name: config
         configMap:
           name: mosquitto-config
+
 ---
+# MOSQUITTO SERVICE
 apiVersion: v1
 kind: Service
 metadata:
   name: mosquitto
   namespace: default
 spec:
-  type: LoadBalancer
+  type: NodePort # ALTERADO: De LoadBalancer para NodePort (funciona 100% offline)
   selector:
     app: mosquitto
   ports:
@@ -69,11 +68,13 @@ spec:
     protocol: TCP
     port: 1883
     targetPort: 1883
-    nodePort: 31883
-  - name: websocket  # ← NOVO
+    nodePort: 31883 # ADICIONADO: Porta fixa para acesso local
+  - name: websocket
     protocol: TCP
     port: 8083
     targetPort: 8083
+    nodePort: 30883 # ADICIONADO: Porta fixa para websocket local
+
 ---
 # EXPORTER DEPLOYMENT
 apiVersion: apps/v1
@@ -107,6 +108,7 @@ spec:
         resources:
           requests: { cpu: 100m, memory: 256Mi }
           limits:   { cpu: 200m, memory: 256Mi }
+
 ---
 apiVersion: v1
 kind: Service
@@ -114,13 +116,14 @@ metadata:
   name: mosquitto-exporter
   namespace: default
 spec:
-  type: LoadBalancer
+  type: ClusterIP # ALTERADO: De LoadBalancer para ClusterIP (não precisa de acesso externo, só o Prometheus acessa)
   selector:
     app: mosquitto-exporter
   ports:
   - protocol: TCP
     port: 9234
     targetPort: 9234
+
 ---
 # PROMETHEUS CONFIG
 apiVersion: v1
@@ -137,6 +140,7 @@ data:
         metrics_path: '/metrics'
         static_configs:
           - targets: ['mosquitto-exporter:9234']
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -179,6 +183,7 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: prometheus-data
+
 ---
 apiVersion: v1
 kind: Service
@@ -186,13 +191,15 @@ metadata:
   name: prometheus
   namespace: default
 spec:
-  type: LoadBalancer
+  type: NodePort # ALTERADO: De LoadBalancer para NodePort
   selector:
     app: prometheus
   ports:
   - protocol: TCP
     port: 9090
     targetPort: 9090
+    nodePort: 30909 # ADICIONADO: Porta fixa para acesso local
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -204,6 +211,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
+
 ---
 # GRAFANA DATASOURCE PROVISIONING
 apiVersion: v1
@@ -221,6 +229,7 @@ data:
         url: http://prometheus:9090
         isDefault: true
         editable: false
+
 ---
 # GRAFANA DEPLOYMENT
 apiVersion: apps/v1
@@ -286,7 +295,7 @@ metadata:
   name: grafana
   namespace: default
 spec:
-  type: LoadBalancer
+  type: NodePort # ALTERADO: De LoadBalancer para NodePort
   selector:
     app: grafana
   ports:
@@ -296,6 +305,7 @@ spec:
     nodePort: 31111
 
 ---
+# MONGO PVC
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -347,13 +357,14 @@ kind: Service
 metadata:
   name: mongo
 spec:
-  type: LoadBalancer
+  type: NodePort # ALTERADO: De LoadBalancer para NodePort
   selector:
     app: mongo
   ports:
     - protocol: TCP
       port: 27017
       targetPort: 27017
+      nodePort: 30017 # ADICIONADO: Porta fixa para acesso local
 
 # Mongo Express
 ---
@@ -394,13 +405,14 @@ kind: Service
 metadata:
   name: express
 spec:
-  type: LoadBalancer
+  type: NodePort # ALTERADO: De LoadBalancer para NodePort
   selector:
     app: express
   ports:
     - protocol: TCP
       port: 8081
       targetPort: 8081
+      nodePort: 30881 # ADICIONADO: Porta fixa para acesso local
 
 # API Node.js
 ---
@@ -420,16 +432,12 @@ spec:
     spec:
       containers:
         - name: apivoltz
-          image: alexsandrojsilva0/apivoltz:latest # Substitua
+          image: alexsandrojsilva0/apivoltz:latest
           ports:
             - containerPort: 3001
           env:
             - name: PORT
               value: "3001"
-            - name: PORT_HTTP
-              value: "3001"
-            - name: PORT_HTTPS
-              value: "443"
             - name: DB_USER
               value: "root"
             - name: DB_PASS
@@ -443,7 +451,7 @@ spec:
             - name: DEV
               value: "false"
             - name: API_URL
-              value: "https://localhost:3001"
+              value: "http://localhost:3001" # ALTERADO: De https para http (evita erro de certificado self-signed no Node)
             - name: BASE_BATTERY_ID
               value: "0x120"
             - name: BASE_CONTROLLER_ID
@@ -459,7 +467,7 @@ kind: Service
 metadata:
   name: apivoltz
 spec:
-  type: LoadBalancer
+  type: NodePort # ALTERADO: De LoadBalancer para NodePort
   selector:
     app: apivoltz
   ports:
@@ -468,3 +476,85 @@ spec:
       targetPort: 3001
       nodePort: 30443
 
+# ==========================================
+# CLOUDFLARE TUNNEL (NOVO)
+# ==========================================
+# Este bloco cria o túnel para acesso externo via Cloudflare
+# Substitua 'SEU_TUNNEL_ID_AQUI' pelo ID gerado no comando 'cloudflared tunnel create'
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cloudflared-credentials
+  namespace: default
+type: Opaque
+data:
+  # ADICIONADO: Cole aqui o conteúdo do arquivo credentials.json em Base64
+  # Comando para gerar: cat ~/.cloudflared/<TUNNEL_ID>.json | base64 -w 0
+  credentials.json: "eyJhIjoiU0VVX1RVTk5FTF9JRF9BUVVJIn0=" # <-- SUBSTITUA ISSO PELO SEU BASE64
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflared-config
+  namespace: default
+data:
+  config.yaml: |
+    # ADICIONADO: Configuração do Ingress do Cloudflare Tunnel
+    tunnel: SEU_TUNNEL_ID_AQUI # <-- SUBSTITUA PELO SEU TUNNEL ID
+    
+    credentials-file: /etc/cloudflared/creds/credentials.json
+    
+    ingress:
+      # Roteamento dos domínios para os serviços internos do k3s
+      - hostname: api.seudominio.com
+        service: http://apivoltz:3001
+      - hostname: grafana.seudominio.com
+        service: http://grafana:3000
+      - hostname: prometheus.seudominio.com
+        service: http://prometheus:9090
+      - hostname: mongo.seudominio.com
+        service: http://express:8081
+      # Regra padrão (retorna 404 para qualquer outra coisa)
+      - service: http_status:404
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflared
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudflared
+  template:
+    metadata:
+      labels:
+        app: cloudflared
+    spec:
+      containers:
+      - name: cloudflared
+        image: cloudflare/cloudflared:latest
+        args:
+        - tunnel
+        - --config
+        - /etc/cloudflared/config/config.yaml
+        - run
+        resources:
+          requests: { cpu: 100m, memory: 128Mi }
+          limits:   { cpu: 200m, memory: 256Mi }
+        volumeMounts:
+        - name: config
+          mountPath: /etc/cloudflared/config
+        - name: credentials
+          mountPath: /etc/cloudflared/creds
+      volumes:
+      - name: config
+        configMap:
+          name: cloudflared-config
+      - name: credentials
+        secret:
+          secretName: cloudflared-credentials
