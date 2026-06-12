@@ -451,7 +451,7 @@ spec:
             - name: DEV
               value: "false"
             - name: API_URL
-              value: "http://localhost:3001" # ALTERADO: De https para http (evita erro de certificado self-signed no Node)
+              value: "https://localhost:3001" # ALTERADO: De https para http (evita erro de certificado self-signed no Node)
             - name: BASE_BATTERY_ID
               value: "0x120"
             - name: BASE_CONTROLLER_ID
