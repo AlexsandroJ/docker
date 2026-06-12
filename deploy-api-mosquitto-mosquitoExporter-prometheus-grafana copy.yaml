@@ -420,7 +420,7 @@ spec:
         - name: apivoltz
           image: alexsandrojsilva0/apivoltz:latest # Substitua
           ports:
-            - containerPort: 3001
+            - containerPort: 443
           env:
             - name: PORT
               value: "443"
